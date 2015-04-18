@@ -79,7 +79,8 @@ angular.module('starter.controllers', [])
     console.log('success!');
   }).error(function(data) {
     console.log('server side error occurred.');
-  });
+  })
+})
 
 .controller('AppCtrl', function($scope, auth, store, $state) {
   $scope.logout = function() {
