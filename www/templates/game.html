@@ -1,0 +1,13 @@
+<ion-view view-title="Game">
+  <ion-content>
+    <img src="{{game.thumbnail_url}}" alt="{{ game.name }}">
+    <h1><span>Name: </span>{{ game.name }}</h1>
+    <p><span>Description: </span>{{ game.description }}</p>
+    <p><span>Min Play Time: </span>{{ game.minplaytime }} minutes </p>
+    <p><span>Max Play Time: </span>{{ game.maxplaytime }} minutes </p>
+    <p><span>Min Players: </span>{{ game.minplayers }}</p>
+    <p><span>Max Players: </span>{{ game.maxplayers }}</p>
+    <p><span>Votes: </span>{{ game.poll.totalvotes }}</p>
+    <p>{{ game.poll }}</p>
+  </ion-content>
+</ion-view>

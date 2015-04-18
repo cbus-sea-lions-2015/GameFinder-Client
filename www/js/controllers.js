@@ -35,8 +35,8 @@ angular.module('starter.controllers', [])
 
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
+    { title: 'Game 1', id: 1 },
+    { title: 'Game 2', id: 2 },
     { title: 'Dubstep', id: 3 },
     { title: 'Indie', id: 4 },
     { title: 'Rap', id: 5 },
@@ -44,5 +44,16 @@ angular.module('starter.controllers', [])
   ];
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+// .controller('PlaylistCtrl', function($scope, $stateParams) {
+// });
+
+.controller('GameCtrl', function($scope, $http, $stateParams) {
+  var url = 'http://localhost:3000/games/1';
+
+  $http.get(url).success(function(game) {
+    $scope.game = game;
+    console.log('success!');
+  }).error(function(data) {
+    console.log('server side error occurred.');
+  });
 });
