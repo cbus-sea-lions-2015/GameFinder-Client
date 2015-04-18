@@ -44,9 +44,6 @@ angular.module('starter.controllers', [])
   ];
 })
 
-// .controller('PlaylistCtrl', function($scope, $stateParams) {
-// });
-
 .controller('GameCtrl', function($scope, $http, $stateParams) {
   var url = 'http://localhost:3000/games/1';
 
