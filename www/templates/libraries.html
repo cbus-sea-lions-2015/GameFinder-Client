@@ -1,17 +1,17 @@
-<ion-view view-title="Search">
+<ion-view view-title="Libraries">
   <ion-content has-header="true" has-subheader="true">
     <div class="bar item-input-inset">
       <div class="item-input-wrapper">
         <i class="icon ion-ios7-search placeholder-icon"></i>
-        <input id="search.searchKey" type="search" placeholder="Search for library..." ng-model="search.searchKey" autocorrect="off" >
+        <input id="search.searchKey" type="search" placeholder="Enter a BGG Username..." ng-model="search.searchKey" autocorrect="off" >
         <button class="button button-clear" ng-click="clearSearch()">X</button>
       </div>
       <button class="button button-clear" ng-click="search()">Search</button>
     </div>
 
     <ion-list>
-      <ion-item ng-repeat="game in search.games" type="item-text-wrap" href="#/app/library/{{game.id}}">
-        <h4>{{ game.name }}</h4>
+      <ion-item ng-repeat="item in search.items" type="item-text-wrap" href="#/app/library/{{item.id}}">
+        <h4>{{ item.bgg_username }}</h4>
       </ion-item>
     </ion-list>
   </ion-content>

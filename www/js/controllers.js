@@ -37,8 +37,19 @@ angular.module('gameFinder.controllers', [])
     };
   })
 
-  .controller('PlaylistsCtrl', function($scope) {
-    $scope.playlists = [
+  .controller('LibCtrl', function($scope, $http, $stateParams) {
+    var url = 'http://gamefinder.herokuapp.com/libraries';
+
+    $http.get(url).success(function(game) {
+      $scope.game = game;
+      console.log('success!');
+    }).error(function(data) {
+      console.log('server side error occurred.');
+    });
+  })
+
+  .controller('GamesCtrl', function($scope) {
+    $scope.games = [
       { title: 'Game 1', id: 1 },
       { title: 'Game 2', id: 2 },
       { title: 'Dubstep', id: 3 },
@@ -49,7 +60,7 @@ angular.module('gameFinder.controllers', [])
   })
 
   .controller('GameCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://gamefinder.herokuapp.com/games/1';
+    var url = 'http://gamefinder.herokuapp.com/games/3';
 
     $http.get(url).success(function(game) {
       $scope.game = game;
@@ -59,29 +70,32 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('SearchCtrl', function($scope,$rootScope, SearchService) {
+
+  .controller('SearchCtrl', function($scope, SearchService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      findAllGames();
+      findAllItems();
     };
 
     $scope.search = function () {
-       SearchService.findByName($scope.search.searchKey).then(function(game) {
-        $scope.search.games = game;
+       SearchService.findByName($scope.search.searchKey).then(function(item) {
+        console.log("item");
+        console.log(item);
+        $scope.search.items = item;
       })
     };
 
-    var findAllGames = function() {
+    var findAllItems = function() {
       SearchService.findAll().then(function (response) {
-        $scope.search.games = [response.data];
+        $scope.search.items = response.data;
       })
     };
 
-    findAllGames();
+    findAllItems();
 
   });
 
