@@ -1,5 +1,36 @@
 <ion-view view-title="Search">
-  <ion-content>
-    <h1>Search</h1>
-  </ion-content>
+  <ion-content has-header="true" has-subheader="true">
+    <div class="bar item-input-inset">
+          <div class="item-input-wrapper">
+              <i class="icon ion-ios7-search placeholder-icon"></i>
+              <input id="searchKey" type="search" placeholder="Search for library..." ng-model="searchKey" autocorrect="off" >
+            <button class="button button-clear" ng-click="clearSearch()">X</button>
+          </div>
+          <button class="button button-clear" ng-click="search()">Search</button>
+
+    </div>
+
+  <list>
+    <item ng-repeat="game in games" type="item-text-wrap" href="#/app/library/{{game.id}}">
+      <p>{{ game.name }}</p>
+    </item>
+  </list>
+</ion-content>
+
+
+<!--   <content has-header="true" has-subheader="true">
+    <list>
+      <item ng-repeat="game in games" type="item-text-wrap">
+      <img src="{{game.thumbnail_url}}" alt="{{ game.name }}">
+      <h1><span>Name: </span>{{ game.name }}</h1>
+      <p><span>Description: </span>{{ game.description }}</p>
+      <p><span>Min Play Time: </span>{{ game.minplaytime }} minutes </p>
+      <p><span>Max Play Time: </span>{{ game.maxplaytime }} minutes </p>
+      <p><span>Min Players: </span>{{ game.minplayers }}</p>
+      <p><span>Max Players: </span>{{ game.maxplayers }}</p>
+      <p><span>BGG ID: </span>{{ game.bgg_id }}</p>
+      </item>
+    </list>
+  </content> -->
+
 </ion-view>

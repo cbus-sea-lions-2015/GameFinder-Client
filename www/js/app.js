@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 
-  'starter.controllers', 
-  'starter.services',
+angular.module('gameFinder', ['ionic',
+  'gameFinder.controllers',
+  'gameFinder.services',
   'auth0',
   'angular-storage',
   'angular-jwt'])
@@ -54,7 +54,8 @@ angular.module('starter', ['ionic',
     url: "/search",
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html"
+        templateUrl: "templates/search.html",
+        controller: 'SearchCtrl'
       }
     }
   })
@@ -88,17 +89,8 @@ angular.module('starter', ['ionic',
     }
   })
 
-  // .state('app.single', {
-  //   url: "http:/localhost:3000/games/:gameID",
-  //   views: {
-  //     'menuContent': {
-  //       templateUrl: "templates/playlist.html",
-  //       controller: 'PlaylistCtrl'
-  //     }
-  //   }
-  // });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/library');
+  $urlRouterProvider.otherwise('/login');
 
   authProvider.init({
     domain: 'bgg-gamefinder.auth0.com',
