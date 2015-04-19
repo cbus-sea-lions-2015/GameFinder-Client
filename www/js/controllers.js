@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('gameFinder.controllers', [])
 .controller('LoginCtrl', function($scope, auth, $state, store) {
   function doAuth() {
     auth.signin({
@@ -23,43 +23,19 @@ angular.module('starter.controllers', [])
   });
 
   doAuth();
-  
-  
+
+
 })
 
-// .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-//   // Form data for the login modal
-//   // $scope.loginData = {};
-
-//   // // Create the login modal that we will use later
-//   // $ionicModal.fromTemplateUrl('templates/login.html', {
-//   //   scope: $scope
-//   // }).then(function(modal) {
-//   //   $scope.modal = modal;
-//   // });
-
-//   // // Triggered in the login modal to close it
-//   // $scope.closeLogin = function() {
-//   //   $scope.modal.hide();
-//   // };
-
-//   // // Open the login modal
-//   // $scope.login = function() {
-//   //   $scope.modal.show();
-//   // };
-
-//   // // Perform the login action when the user submits the login form
-//   // $scope.doLogin = function() {
-//   //   console.log('Doing login', $scope.loginData);
-
-//   //   // Simulate a login delay. Remove this and replace with your login
-//   //   // code if using a login system
-//   //   $timeout(function() {
-//   //     $scope.closeLogin();
-//   //   }, 1000);
-//   // };
-// })
-
+.controller('AppCtrl', function($scope, auth, store, $state) {
+  $scope.logout = function() {
+    auth.signout();
+    store.remove('token');
+    store.remove('profile');
+    store.remove('refreshToken');
+    $state.go('login', {}, {reload: true});
+  };
+})
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [
     { title: 'Game 1', id: 1 },
@@ -76,18 +52,38 @@ angular.module('starter.controllers', [])
 
   $http.get(url).success(function(game) {
     $scope.game = game;
+    console.log(game);
     console.log('success!');
   }).error(function(data) {
     console.log('server side error occurred.');
-  })
+  });
 })
 
-.controller('AppCtrl', function($scope, auth, store, $state) {
-  $scope.logout = function() {
-    auth.signout();
-    store.remove('token');
-    store.remove('profile');
-    store.remove('refreshToken');
-    $state.go('login', {}, {reload: true});
+.controller('SearchCtrl', function($scope,$rootScope, SearchService) {
+
+  $scope.searchKey = "";
+  console.log($scope);
+
+  $scope.clearSearch = function () {
+    $scope.searchKey = "";
+    console.log($scope);
+    findAllGames();
   };
+
+  $scope.search = function () {
+    SearchService.findById($scope.searchKey).then(function(game) {
+      $scope.games = game.data;
+      console.log("made search!");
+      console.log(game);
+    });
+  };
+
+  var findAllGames = function() {
+    SearchService.findAll().then(function (response) {
+      $scope.games = response.data;
+    })
+  };
+
+  findAllGames();
+
 });
