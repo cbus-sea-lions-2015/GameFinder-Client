@@ -20,7 +20,7 @@ angular.module('gameFinder.services', [])
                 game = response;
                 return game;
             });
-        }
+        },
 
         findById: function(gameId) {
             var url = ["http://localhost:3000/games/", gameId].join("")

@@ -81,7 +81,7 @@ angular.module('gameFinder.controllers', [])
 
     var findAllGames = function() {
       SearchService.findAll().then(function (response) {
-        $scope.search.games = response.data;
+        $scope.search.games = [response.data];
         console.log(response.data);
       })
     };
