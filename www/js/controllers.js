@@ -83,8 +83,8 @@ angular.module('gameFinder.controllers', [])
 
     $scope.search = function () {
        SearchService.findByName($scope.search.searchKey).then(function(item) {
-        console.log("item");
-        console.log(item);
+        // console.log("item");
+        // console.log(item);
         $scope.search.items = item;
       })
     };

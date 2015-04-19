@@ -6,7 +6,12 @@ angular.module('gameFinder.services', [])
 
     var findAll = function() {
         return $http.get(app_url).success(function(response){
-            return [response];
+            if (typeof response == 'array') {
+                return response;
+            }
+            else {
+                return [response];
+            }  ;
         });
     };
 
@@ -17,9 +22,10 @@ angular.module('gameFinder.services', [])
             var deferred = $q.defer();
             var output;
              findAll().then(function (response) {
-                var games = [response.data];
-                console.log(name);
+                var games = response.data;
+                // console.log(name);
                 output = _.where(games, { bgg_username: name });
+                console.log(games);
                 deferred.resolve(output);
             })
             return deferred.promise;
