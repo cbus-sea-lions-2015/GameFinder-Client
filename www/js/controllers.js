@@ -71,31 +71,39 @@ angular.module('gameFinder.controllers', [])
   })
 
 
-  .controller('SearchCtrl', function($scope, SearchService) {
+  .controller('SearchCtrl', function($scope, GameService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
+    $scope.search.libraryList = true;
+    $scope.search.gameList = false;
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      findAllItems();
+      $scope.findAllItems();
     };
 
-    $scope.search = function () {
-       SearchService.findByName($scope.search.searchKey).then(function(item) {
-        console.log("item");
-        console.log(item);
+    $scope.searchFunc = function () {
+       GameService.findLibrary($scope.search.searchKey).then(function(item) {
         $scope.search.items = item;
       })
     };
 
-    var findAllItems = function() {
-      SearchService.findAll().then(function (response) {
+    $scope.popGames = function(username) {
+      GameService.findItems('game',username).then(function (response) {
+        $scope.search.gameList = true;
+        $scope.search.libraryList = false;
         $scope.search.items = response.data;
       })
     };
 
-    findAllItems();
+    $scope.findAllLibraries = function() {
+      GameService.findItems('library').then(function (response) {
+        $scope.search.items = response.data;
+      })
+    };
+
+    $scope.findAllLibraries();
 
   });
 
