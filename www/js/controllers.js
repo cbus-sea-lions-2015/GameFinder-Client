@@ -12,7 +12,7 @@ angular.module('gameFinder.controllers', [])
       store.set('profile', profile);
       store.set('token', idToken);
       store.set('refreshToken', refreshToken);
-      $state.go('app.playlists');
+      $state.go('app.library');
     }, function(error) {
       console.log("There was an error logging in", error);
     });

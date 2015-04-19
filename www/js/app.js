@@ -90,7 +90,7 @@ angular.module('gameFinder', ['ionic',
   })
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/library');
+  $urlRouterProvider.otherwise('/login');
 
   authProvider.init({
     domain: 'bgg-gamefinder.auth0.com',
