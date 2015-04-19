@@ -89,6 +89,12 @@ angular.module('gameFinder.controllers', [])
       })
     };
 
+    $scope.goBack = function() {
+      $scope.search.libraryList = true;
+      $scope.search.gameList = false;
+      $scope.findAllLibraries();
+    }
+
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {
         $scope.search.gameList = true;
