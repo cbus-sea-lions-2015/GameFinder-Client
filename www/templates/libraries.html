@@ -6,13 +6,20 @@
         <input id="search.searchKey" type="search" placeholder="Enter a BGG Username..." ng-model="search.searchKey" autocorrect="off" >
         <button class="button button-clear" ng-click="clearSearch()">X</button>
       </div>
-      <button class="button button-clear" ng-click="search()">Search</button>
+      <button class="button button-clear" ng-click="searchFunc()">Search</button>
     </div>
 
-    <ion-list>
-      <ion-item ng-repeat="item in search.items" type="item-text-wrap" href="#/app/library/{{item.id}}">
-        <h4>{{ item.bgg_username }}</h4>
+    <ion-list ng-show='search.libraryList'>
+      <ion-item ng-repeat="library in search.items" type="item-text-wrap" ng-click="popGames(library.bgg_username)">
+        <h4>{{ library.bgg_username }}</h4>
       </ion-item>
     </ion-list>
+
+    <ion-list ng-show='search.gameList'>
+      <ion-item ng-repeat="game in search.items" href="#/app/library/{{game.id}}">
+        <h4> {{ game.name }}</h4>
+      </ion-item>
+    </ion-list>
+
   </ion-content>
 </ion-view>
