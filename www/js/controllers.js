@@ -48,19 +48,8 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('GamesCtrl', function($scope) {
-    $scope.games = [
-      { title: 'Game 1', id: 1 },
-      { title: 'Game 2', id: 2 },
-      { title: 'Dubstep', id: 3 },
-      { title: 'Indie', id: 4 },
-      { title: 'Rap', id: 5 },
-      { title: 'Cowbell', id: 6 }
-    ];
-  })
-
   .controller('GameCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://gamefinder.herokuapp.com/games/3';
+    var url = ['http://gamefinder.herokuapp.com/games/', $stateParams.gameId].join("");
 
     $http.get(url).success(function(game) {
       $scope.game = game;
