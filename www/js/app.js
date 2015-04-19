@@ -55,7 +55,7 @@ angular.module('gameFinder', ['ionic',
     url: "/search",
     views: {
       'menuContent': {
-        templateUrl: "templates/search.html",
+        templateUrl: "templates/libraries.html",
         controller: 'SearchCtrl'
       }
     }
@@ -74,8 +74,8 @@ angular.module('gameFinder', ['ionic',
     url: "/library",
     views: {
       'menuContent': {
-        templateUrl: "templates/playlists.html",
-        controller: 'PlaylistsCtrl'
+        templateUrl: "templates/games.html",
+        controller: 'GamesCtrl'
       }
     }
   })

@@ -2,8 +2,10 @@ angular.module('gameFinder.services', [])
 
   .factory('SearchService', function($http, $q) {
     // var cachedGames;
+    var app_url = "http://gamefinder.herokuapp.com/libraries";
+
     var findAll = function() {
-        return $http.get("http://gamefinder.herokuapp.com/games").success(function(response){
+        return $http.get(app_url).success(function(response){
             return [response];
         });
     };
@@ -11,12 +13,13 @@ angular.module('gameFinder.services', [])
     var SearchService = {
         findAll:findAll,
 
-        findByName: function(gameName) {
+        findByName: function(name) {
             var deferred = $q.defer();
             var output;
              findAll().then(function (response) {
                 var games = [response.data];
-                output = _.where(games, {name: gameName});
+                console.log(name);
+                output = _.where(games, { bgg_username: name });
                 deferred.resolve(output);
             })
             return deferred.promise;
