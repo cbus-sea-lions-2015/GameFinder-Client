@@ -23,9 +23,10 @@ angular.module('gameFinder.services', [])
         },
 
         findById: function(gameId) {
-            var url = ["http://localhost:3000/games/", gameId].join("")
+            var url = ["http://gamefinder.herokuapp.com/games/", gameId].join("")
             return $http.get(url).then(function(response){
-                game = response;
+                console.log(response)
+                game = [response.data];
                 return game;
             });
         }
