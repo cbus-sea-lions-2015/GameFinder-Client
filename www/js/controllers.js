@@ -1,4 +1,5 @@
 angular.module('gameFinder.controllers', [])
+
 .controller('LoginCtrl', function($scope, auth, $state, store) {
   function doAuth() {
     auth.signin({
@@ -24,7 +25,6 @@ angular.module('gameFinder.controllers', [])
 
   doAuth();
 
-
 })
 
 .controller('AppCtrl', function($scope, auth, store, $state) {
@@ -36,6 +36,7 @@ angular.module('gameFinder.controllers', [])
     $state.go('login', {}, {reload: true});
   };
 })
+
 .controller('PlaylistsCtrl', function($scope) {
   $scope.playlists = [
     { title: 'Game 1', id: 1 },
@@ -61,7 +62,7 @@ angular.module('gameFinder.controllers', [])
 
 .controller('SearchCtrl', function($scope,$rootScope, SearchService) {
 
-  $scope.searchKey = "";
+  $scope.searchKey = "t";
   console.log($scope);
 
   $scope.clearSearch = function () {
@@ -87,3 +88,4 @@ angular.module('gameFinder.controllers', [])
   findAllGames();
 
 });
+
