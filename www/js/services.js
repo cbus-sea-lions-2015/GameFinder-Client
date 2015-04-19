@@ -1,25 +1,25 @@
 angular.module('gameFinder.services', [])
 
-  .factory('SearchService', function($http) {
-    var cachedGames;
-    return {
+  .factory('SearchService', function($http, $q) {
+    // var cachedGames;
+    var findAll = function() {
+        return $http.get("http://gamefinder.herokuapp.com/games").success(function(response){
+            return [response];
+        });
+    };
 
-        findAll: function() {
-            return cachedGames || $http.get("http://localhost:3000/games").success(function(response){
-                cachedGames = response;
-                return response;
-                // return games;
-            });
-        },
+    var SearchService = {
+        findAll:findAll,
 
         findByName: function(gameName) {
-            // var url = ["http://localhost:3000/games/", gameId].join("")
-            // var url = $http.get("http://localhost:3000/games")
-
-            return $http.get(url).then(function(response){
-                game = response;
-                return game;
-            });
+            var deferred = $q.defer();
+            var output;
+             findAll().then(function (response) {
+                var games = [response.data];
+                output = _.where(games, {name: gameName});
+                deferred.resolve(output);
+            })
+            return deferred.promise;
         },
 
         findById: function(gameId) {
@@ -30,5 +30,6 @@ angular.module('gameFinder.services', [])
             });
         }
     }
+    return SearchService;
   });
 

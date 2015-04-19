@@ -49,11 +49,10 @@ angular.module('gameFinder.controllers', [])
   })
 
   .controller('GameCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://localhost:3000/games/1';
+    var url = 'http://gamefinder.herokuapp.com/games/1';
 
     $http.get(url).success(function(game) {
       $scope.game = game;
-      console.log(game);
       console.log('success!');
     }).error(function(data) {
       console.log('server side error occurred.');
@@ -61,28 +60,24 @@ angular.module('gameFinder.controllers', [])
   })
 
   .controller('SearchCtrl', function($scope,$rootScope, SearchService) {
+
     $scope.search = {};
     $scope.search.searchKey = "";
-    console.log(_);
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      console.log($scope);
       findAllGames();
     };
 
     $scope.search = function () {
-      SearchService.findByName($scope.search.searchKey).then(function(game) {
-        $scope.search.games = [game.data];
-        console.log("made search!");
-        console.log(game.data);
-      });
+       SearchService.findByName($scope.search.searchKey).then(function(game) {
+        $scope.search.games = game;
+      })
     };
 
     var findAllGames = function() {
       SearchService.findAll().then(function (response) {
         $scope.search.games = [response.data];
-        console.log(response.data);
       })
     };
 
