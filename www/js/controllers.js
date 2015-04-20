@@ -60,104 +60,27 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-.controller('AppCtrl', function($rootScope, $scope, auth, store, $state) {
-    $scope.logout = function() {
-      auth.signout();
-      store.remove('token');
-      store.remove('profile');
-      store.remove('refreshToken');
-      $state.go('login', {}, {reload: true});
-    };
+  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state) {
+      $scope.logout = function() {
+        auth.signout();
+        store.remove('token');
+        store.remove('profile');
+        store.remove('refreshToken');
+        $state.go('login', {}, {reload: true});
+      };
 
-    $rootScope.$watch('libraryList', function(newValue, oldValue){
-      $scope.search.libraryList = newValue;
-    });
-    $rootScope.$watch('gameList', function(newValue, oldValue){
-      $scope.search.gameList = newValue;
-    });
+      var scope = $rootScope;
 
-    $scope.search = {};
-    $scope.search.libraryList = $rootScope.libraryList
-    $scope.search.gameList = $rootScope.gameList
-})
-
-  .controller('SearchCtrl', function($rootScope, $scope, GameService) {
-
-    $scope.search = {};
-    $scope.search.searchKey = "";
-    $scope.search.libraryList = true;
-    $scope.search.gameList = false;
-
-
-
-    $scope.clearSearch = function () {
-      $scope.search.searchKey = "";
-      $scope.findAllItems();
-    };
-
-    $scope.searchFunc = function () {
-       GameService.findLibrary($scope.search.searchKey).then(function(item) {
-        $scope.search.items = item;
-      })
-    };
-
-    $scope.popGames = function(username) {
-      GameService.findItems('game',username).then(function (response) {
-        $scope.search.gameList = true;
-        $scope.search.libraryList = false;
-        $scope.search.items = response.data;
-        $rootScope.libraryList = false;
-        $rootScope.gameList = true;
-      })
-    };
-
-    $scope.findAllLibraries = function() {
-      GameService.findItems('library').then(function (response) {
-        $scope.search.items = response.data;
-      })
-    };
-
-    $scope.findAllLibraries();
-
-  });
-
-angular.module('gameFinder.controllers', [])
-
-  .controller('LoginCtrl', function($scope, auth, $state, store) {
-    function doAuth() {
-      auth.signin({
-        closable: false,
-        // This asks for the refresh token
-        // So that the user never has to log in again
-        authParams: {
-          scope: 'openid offline_access'
-        }
-      }, function(profile, idToken, accessToken, state, refreshToken) {
-        store.set('profile', profile);
-        store.set('token', idToken);
-        store.set('refreshToken', refreshToken);
-        $state.go('app.library');
-      }, function(error) {
-        console.log("There was an error logging in", error);
+      scope.$watch('libraryList', function(newValue, oldValue){
+        $scope.search.libraryList = newValue;
       });
-    }
+      scope.$watch('gameList', function(newValue, oldValue){
+        $scope.search.gameList = newValue;
+      });
 
-    $scope.$on('$ionic.reconnectScope', function() {
-      doAuth();
-    });
-
-    doAuth();
-
-  })
-
-  .controller('AppCtrl', function($scope, auth, store, $state) {
-    $scope.logout = function() {
-      auth.signout();
-      store.remove('token');
-      store.remove('profile');
-      store.remove('refreshToken');
-      $state.go('login', {}, {reload: true});
-    };
+      $scope.search = {};
+      $scope.search.libraryList = $rootScope.libraryList
+      $scope.search.gameList = $rootScope.gameList
   })
 
   .controller('GameCtrl', function($scope, $http, $stateParams) {
@@ -171,7 +94,7 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('SearchCtrl', function($scope, GameService) {
+  .controller('SearchCtrl', function($rootScope, $scope, GameService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
@@ -193,13 +116,15 @@ angular.module('gameFinder.controllers', [])
       $scope.search.libraryList = true;
       $scope.search.gameList = false;
       $scope.findAllLibraries();
-    }
+    }; 
 
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {
         $scope.search.gameList = true;
         $scope.search.libraryList = false;
         $scope.search.items = response.data;
+        $rootScope.libraryList = false;
+        $rootScope.gameList = true;
       })
     };
 
@@ -211,5 +136,4 @@ angular.module('gameFinder.controllers', [])
 
     $scope.findAllLibraries();
 
-  });
-
+  })
