@@ -40,12 +40,13 @@ angular.module('gameFinder.controllers', [])
 
   .controller('AppCtrl', function($rootScope, $scope, auth, store, $state, GameService, FilterService) {
       $scope.search = {};
+      $scope.filter = {};
       $scope.search.libraryList = $rootScope.libraryList;
       $scope.search.gameList = $rootScope.gameList;
       $rootScope.gameList = true;
 
       $rootScope.items = null;
-
+      $rootScope.library_games = null;
       $scope.logout = function() {
         auth.signout();
         store.remove('token');
@@ -63,11 +64,19 @@ angular.module('gameFinder.controllers', [])
         $scope.search.gameList = newValue;
       });
 
+      // $scope.mechFilter = function() {
+      //   GameService.findbyMechanic([$scope.search.mechanic], scope.library_games)
+      //     .then(function(response) {
+      //       $rootScope.items = FilterService.filterDuplicates(response);
+      //       // $rootScope.items = response;
+      //       // console.log(scope.library_games)
+      //     })
+      // };
+
       $scope.mechFilter = function() {
-        GameService.findbyMechanic([$scope.search.mechanic]).then(function(response) {
-            $rootScope.items = FilterService.filterDuplicates(response);
-            // $rootScope.items = response;
-        })
+        console.log($scope.filter.mechanic);
+        var filtered_games = FilterService.findbyFilter($scope.filter, scope.library_games)
+        $rootScope.items = FilterService.filterDuplicates(filtered_games);
       };
   })
 
@@ -108,6 +117,7 @@ angular.module('gameFinder.controllers', [])
       GameService.findItems('game',username).then(function (response) {
         games_list = FilterService.filterDuplicates(response.data);
         $scope.search.items = games_list;
+
         $scope.search.gameList = true;
         $rootScope.gameList = true;
 
@@ -115,6 +125,7 @@ angular.module('gameFinder.controllers', [])
         $rootScope.libraryList = false;
 
         var scope = $rootScope;
+        scope.library_games = games_list;
 
         scope.$watch('items', function(newValue, oldValue){
            $scope.search.items = $rootScope.items || $scope.search.items;
