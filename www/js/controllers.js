@@ -38,7 +38,7 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state, GameService) {
+  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state, GameService, FilterService) {
       $scope.search = {};
       $scope.search.libraryList = $rootScope.libraryList;
       $scope.search.gameList = $rootScope.gameList;
@@ -65,22 +65,22 @@ angular.module('gameFinder.controllers', [])
 
       $scope.mechFilter = function() {
         GameService.findbyMechanic([$scope.search.mechanic]).then(function(response) {
-            $rootScope.items = response;
+            $rootScope.items = FilterService.filterDuplicates(response);
+            // $rootScope.items = response;
         })
       };
   })
 
-  .controller('GameCtrl', function($scope, $http, $stateParams, GameService) {
+  .controller('GameCtrl', function($scope, $http, $stateParams, GameService, FilterService) {
     var url = ['http://gamefinder.herokuapp.com/games/',$stateParams.gameId].join("");
     $http.get(url).success(function(game) {
       $scope.game = game;
-      console.log('success!');
     }).error(function(data) {
       console.log('server side error occurred.');
     });
   })
 
-  .controller('SearchCtrl', function($rootScope, $scope, GameService) {
+  .controller('SearchCtrl', function($rootScope, $scope, GameService, FilterService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
@@ -89,7 +89,7 @@ angular.module('gameFinder.controllers', [])
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      $scope.findAllItems();
+      $scope.findAllLibraries();
     };
 
     $scope.searchFunc = function () {
@@ -106,8 +106,8 @@ angular.module('gameFinder.controllers', [])
 
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {
-
-        $scope.search.items = response.data;
+        games_list = FilterService.filterDuplicates(response.data);
+        $scope.search.items = games_list;
         $scope.search.gameList = true;
         $rootScope.gameList = true;
 
