@@ -13,7 +13,7 @@ angular.module('gameFinder.controllers', [])
         store.set('profile', profile);
         store.set('token', idToken);
         store.set('refreshToken', refreshToken);
-        $state.go('app.library');
+        $state.go('app.search');
       }, function(error) {
         console.log("There was an error logging in", error);
       });
@@ -27,18 +27,8 @@ angular.module('gameFinder.controllers', [])
 
   })
 
-  .controller('AppCtrl', function($scope, auth, store, $state) {
-    $scope.logout = function() {
-      auth.signout();
-      store.remove('token');
-      store.remove('profile');
-      store.remove('refreshToken');
-      $state.go('login', {}, {reload: true});
-    };
-  })
-
-  .controller('GameCtrl', function($scope, $http, $stateParams) {
-    var url = ['http://gamefinder.herokuapp.com/games/', $stateParams.gameId].join("");
+  .controller('LibCtrl', function($scope, $http, $stateParams) {
+    var url = 'http://gamefinder.herokuapp.com/libraries';
 
     $http.get(url).success(function(game) {
       $scope.game = game;
@@ -48,7 +38,63 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('SearchCtrl', function($scope, GameService) {
+  .controller('GamesCtrl', function($scope) {
+    $scope.games = [
+      { title: 'Game 1', id: 1 },
+      { title: 'Game 2', id: 2 },
+      { title: 'Dubstep', id: 3 },
+      { title: 'Indie', id: 4 },
+      { title: 'Rap', id: 5 },
+      { title: 'Cowbell', id: 6 }
+    ];
+  })
+
+  .controller('GameCtrl', function($scope, $http, $stateParams) {
+    var url = 'http://gamefinder.herokuapp.com/games/3';
+
+    $http.get(url).success(function(game) {
+      $scope.game = game;
+      console.log('success!');
+    }).error(function(data) {
+      console.log('server side error occurred.');
+    });
+  })
+
+  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state) {
+      $scope.logout = function() {
+        auth.signout();
+        store.remove('token');
+        store.remove('profile');
+        store.remove('refreshToken');
+        $state.go('login', {}, {reload: true});
+      };
+
+      var scope = $rootScope;
+
+      scope.$watch('libraryList', function(newValue, oldValue){
+        $scope.search.libraryList = newValue;
+      });
+      scope.$watch('gameList', function(newValue, oldValue){
+        $scope.search.gameList = newValue;
+      });
+
+      $scope.search = {};
+      $scope.search.libraryList = $rootScope.libraryList
+      $scope.search.gameList = $rootScope.gameList
+  })
+
+  .controller('GameCtrl', function($scope, $http, $stateParams) {
+    var url = ['http://gamefinder.herokuapp.com/games/',$stateParams.gameId].join("");
+
+    $http.get(url).success(function(game) {
+      $scope.game = game;
+      console.log('success!');
+    }).error(function(data) {
+      console.log('server side error occurred.');
+    });
+  })
+
+  .controller('SearchCtrl', function($rootScope, $scope, GameService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
@@ -70,13 +116,15 @@ angular.module('gameFinder.controllers', [])
       $scope.search.libraryList = true;
       $scope.search.gameList = false;
       $scope.findAllLibraries();
-    }
+    }; 
 
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {
         $scope.search.gameList = true;
         $scope.search.libraryList = false;
         $scope.search.items = response.data;
+        $rootScope.libraryList = false;
+        $rootScope.gameList = true;
       })
     };
 
@@ -88,5 +136,4 @@ angular.module('gameFinder.controllers', [])
 
     $scope.findAllLibraries();
 
-  });
-
+  })

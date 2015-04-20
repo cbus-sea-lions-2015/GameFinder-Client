@@ -22,14 +22,12 @@
           Logout
         </ion-item>
         <ion-item nav-clear menu-close href="#/app/search">
-          Search
+          Find A Library
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/browse">
-          Browse
+        <ion-item nav-clear menu-close ng-show="search.gameList">
+          # Players
         </ion-item>
-        <ion-item nav-clear menu-close href="#/app/library">
-          Library
-        </ion-item>
+        {{search}}
       </ion-list>
     </ion-content>
   </ion-side-menu>
