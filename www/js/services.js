@@ -12,6 +12,7 @@ angular.module('gameFinder.services', [])
             url = [app_url,username].join("")
         }
         return $http.get(url).success(function(response){
+            console.log(response);
             if (typeof response == 'array') {
                 return response;
             }
@@ -46,6 +47,23 @@ angular.module('gameFinder.services', [])
                 var games = response.data;
                 output = _.where(games, { bgg_username: name });
                 console.log(games);
+                deferred.resolve(output);
+            })
+            return deferred.promise;
+        },
+
+        findbyMechanic: function(type, mech_array) {
+            var deferred = $q.defer();
+            var output;
+             findAll('game','Toox').then(function (response) {
+                var games = response.data;
+                output =  _.filter(games, function(game) {
+                    var found = false;
+                        _.each(mech_array, function(search_mech){
+                            if (_.contains(game.mechanics, search_mech)) { found = true; }
+                        })
+                      return found;
+                    })
                 deferred.resolve(output);
             })
             return deferred.promise;
