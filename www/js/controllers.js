@@ -37,17 +37,6 @@ angular.module('gameFinder.controllers', [])
     };
   })
 
-  .controller('LibCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://gamefinder.herokuapp.com/libraries';
-
-    $http.get(url).success(function(game) {
-      $scope.game = game;
-      console.log('success!');
-    }).error(function(data) {
-      console.log('server side error occurred.');
-    });
-  })
-
   .controller('GameCtrl', function($scope, $http, $stateParams) {
     var url = ['http://gamefinder.herokuapp.com/games/',$stateParams.gameId].join("");
 
@@ -58,7 +47,6 @@ angular.module('gameFinder.controllers', [])
       console.log('server side error occurred.');
     });
   })
-
 
   .controller('SearchCtrl', function($scope, GameService) {
 
