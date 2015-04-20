@@ -12,7 +12,7 @@ angular.module('gameFinder.services', [])
             url = [app_url,username].join("")
         }
         return $http.get(url).success(function(response){
-            console.log(response);
+            // console.log(response);
             if (typeof response == 'array') {
                 return response;
             }
@@ -52,7 +52,7 @@ angular.module('gameFinder.services', [])
             return deferred.promise;
         },
 
-        findbyMechanic: function(type, mech_array) {
+        findbyMechanic: function(mech_array) {
             var deferred = $q.defer();
             var output;
              findAll('game','Toox').then(function (response) {

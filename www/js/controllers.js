@@ -38,7 +38,14 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state) {
+  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state, GameService) {
+      $scope.search = {};
+      $scope.search.libraryList = $rootScope.libraryList;
+      $scope.search.gameList = $rootScope.gameList;
+      $rootScope.gameList = true;
+
+      $rootScope.items = null;
+
       $scope.logout = function() {
         auth.signout();
         store.remove('token');
@@ -56,14 +63,15 @@ angular.module('gameFinder.controllers', [])
         $scope.search.gameList = newValue;
       });
 
-      $scope.search = {};
-      $scope.search.libraryList = $rootScope.libraryList
-      $scope.search.gameList = $rootScope.gameList
+      $scope.mechFilter = function() {
+        GameService.findbyMechanic([$scope.search.mechanic]).then(function(response) {
+            $rootScope.items = response;
+        })
+      };
   })
 
   .controller('GameCtrl', function($scope, $http, $stateParams, GameService) {
     var url = ['http://gamefinder.herokuapp.com/games/',$stateParams.gameId].join("");
-    //GameService.findbyMechanic(["Area Enclosure"]);
     $http.get(url).success(function(game) {
       $scope.game = game;
       console.log('success!');
@@ -94,15 +102,24 @@ angular.module('gameFinder.controllers', [])
       $scope.search.libraryList = true;
       $scope.search.gameList = false;
       $scope.findAllLibraries();
-    }; 
+    };
 
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {
-        $scope.search.gameList = true;
-        $scope.search.libraryList = false;
+
         $scope.search.items = response.data;
-        $rootScope.libraryList = false;
+        $scope.search.gameList = true;
         $rootScope.gameList = true;
+
+        $scope.search.libraryList = false;
+        $rootScope.libraryList = false;
+
+        var scope = $rootScope;
+
+        scope.$watch('items', function(newValue, oldValue){
+           $scope.search.items = $rootScope.items || $scope.search.items;
+        });
+
       })
     };
 
