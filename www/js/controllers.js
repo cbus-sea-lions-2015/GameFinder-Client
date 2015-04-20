@@ -37,30 +37,8 @@ angular.module('gameFinder.controllers', [])
     };
   })
 
-  .controller('LibCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://gamefinder.herokuapp.com/libraries';
-
-    $http.get(url).success(function(game) {
-      $scope.game = game;
-      console.log('success!');
-    }).error(function(data) {
-      console.log('server side error occurred.');
-    });
-  })
-
-  .controller('GamesCtrl', function($scope) {
-    $scope.games = [
-      { title: 'Game 1', id: 1 },
-      { title: 'Game 2', id: 2 },
-      { title: 'Dubstep', id: 3 },
-      { title: 'Indie', id: 4 },
-      { title: 'Rap', id: 5 },
-      { title: 'Cowbell', id: 6 }
-    ];
-  })
-
   .controller('GameCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://gamefinder.herokuapp.com/games/3';
+    var url = ['http://gamefinder.herokuapp.com/games/', $stateParams.gameId].join("");
 
     $http.get(url).success(function(game) {
       $scope.game = game;
@@ -69,7 +47,6 @@ angular.module('gameFinder.controllers', [])
       console.log('server side error occurred.');
     });
   })
-
 
   .controller('SearchCtrl', function($scope, GameService) {
 
@@ -88,6 +65,12 @@ angular.module('gameFinder.controllers', [])
         $scope.search.items = item;
       })
     };
+
+    $scope.goBack = function() {
+      $scope.search.libraryList = true;
+      $scope.search.gameList = false;
+      $scope.findAllLibraries();
+    }
 
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {

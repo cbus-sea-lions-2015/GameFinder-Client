@@ -61,27 +61,8 @@ angular.module('gameFinder', ['ionic',
     }
   })
 
-  .state('app.browse', {
-    url: "/browse",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/browse.html"
-      }
-    }
-  })
-
-  .state('app.library', {
-    url: "/library",
-    views: {
-      'menuContent': {
-        templateUrl: "templates/games.html",
-        controller: 'GamesCtrl'
-      }
-    }
-  })
-
   .state('app.single', {
-    url: "/library/:gameID",
+    url: "/library/:gameId",
     views: {
       'menuContent': {
         templateUrl: "templates/game.html",

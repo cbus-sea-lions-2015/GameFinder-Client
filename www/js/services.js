@@ -1,8 +1,6 @@
 angular.module('gameFinder.services', [])
 
   .factory('GameService', function($http, $q) {
-    // var cachedGames;
-
     var app_url = "http://gamefinder.herokuapp.com/libraries/";
 
     var findAll = function(type,username) {

@@ -1,6 +1,7 @@
 <ion-view view-title="Libraries">
   <ion-content has-header="true" has-subheader="true">
     <div class="bar item-input-inset">
+    <button class="button button-clear" ng-show='search.gameList' ng-click="goBack()">Back</button>
       <div class="item-input-wrapper">
         <i class="icon ion-ios7-search placeholder-icon"></i>
         <input id="search.searchKey" type="search" placeholder="Enter a BGG Username..." ng-model="search.searchKey" autocorrect="off" >
