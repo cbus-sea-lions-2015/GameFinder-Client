@@ -38,29 +38,14 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('GamesCtrl', function($scope) {
-    $scope.games = [
-      { title: 'Game 1', id: 1 },
-      { title: 'Game 2', id: 2 },
-      { title: 'Dubstep', id: 3 },
-      { title: 'Indie', id: 4 },
-      { title: 'Rap', id: 5 },
-      { title: 'Cowbell', id: 6 }
-    ];
-  })
+  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state, GameService, FilterService) {
+      $scope.search = {};
+      $scope.search.libraryList = $rootScope.libraryList;
+      $scope.search.gameList = $rootScope.gameList;
+      $rootScope.gameList = true;
 
-  .controller('GameCtrl', function($scope, $http, $stateParams) {
-    var url = 'http://gamefinder.herokuapp.com/games/3';
+      $rootScope.items = null;
 
-    $http.get(url).success(function(game) {
-      $scope.game = game;
-      console.log('success!');
-    }).error(function(data) {
-      console.log('server side error occurred.');
-    });
-  })
-
-  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state) {
       $scope.logout = function() {
         auth.signout();
         store.remove('token');
@@ -78,23 +63,24 @@ angular.module('gameFinder.controllers', [])
         $scope.search.gameList = newValue;
       });
 
-      $scope.search = {};
-      $scope.search.libraryList = $rootScope.libraryList
-      $scope.search.gameList = $rootScope.gameList
+      $scope.mechFilter = function() {
+        GameService.findbyMechanic([$scope.search.mechanic]).then(function(response) {
+            $rootScope.items = FilterService.filterDuplicates(response);
+            // $rootScope.items = response;
+        })
+      };
   })
 
-  .controller('GameCtrl', function($scope, $http, $stateParams) {
+  .controller('GameCtrl', function($scope, $http, $stateParams, GameService, FilterService) {
     var url = ['http://gamefinder.herokuapp.com/games/',$stateParams.gameId].join("");
-
     $http.get(url).success(function(game) {
       $scope.game = game;
-      console.log('success!');
     }).error(function(data) {
       console.log('server side error occurred.');
     });
   })
 
-  .controller('SearchCtrl', function($rootScope, $scope, GameService) {
+  .controller('SearchCtrl', function($rootScope, $scope, GameService, FilterService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
@@ -103,7 +89,7 @@ angular.module('gameFinder.controllers', [])
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      $scope.findAllItems();
+      $scope.findAllLibraries();
     };
 
     $scope.searchFunc = function () {
@@ -116,15 +102,24 @@ angular.module('gameFinder.controllers', [])
       $scope.search.libraryList = true;
       $scope.search.gameList = false;
       $scope.findAllLibraries();
-    }; 
+    };
 
     $scope.popGames = function(username) {
       GameService.findItems('game',username).then(function (response) {
+        games_list = FilterService.filterDuplicates(response.data);
+        $scope.search.items = games_list;
         $scope.search.gameList = true;
-        $scope.search.libraryList = false;
-        $scope.search.items = response.data;
-        $rootScope.libraryList = false;
         $rootScope.gameList = true;
+
+        $scope.search.libraryList = false;
+        $rootScope.libraryList = false;
+
+        var scope = $rootScope;
+
+        scope.$watch('items', function(newValue, oldValue){
+           $scope.search.items = $rootScope.items || $scope.search.items;
+        });
+
       })
     };
 
