@@ -30,6 +30,8 @@ angular.module('gameFinder', ['ionic',
 .config(function($stateProvider, $urlRouterProvider, authProvider,
   jwtInterceptorProvider, $httpProvider) {
 
+  $httpProvider.defaults.cache = true;
+
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
