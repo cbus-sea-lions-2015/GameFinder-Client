@@ -70,11 +70,12 @@ angular.module('gameFinder.services', [])
           })
           return found;
         })
+        // console.log(output);
         return output;
       },
 
       categoryFilter: function(filter, root_scope_games) {
-        console.log(filter);
+        // console.log(filter);
         var output =  _.filter(root_scope_games, function(game) {
           var found = false;
           _.each([filter.categories], function(filter_item){
