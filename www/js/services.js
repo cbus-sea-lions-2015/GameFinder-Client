@@ -54,7 +54,7 @@ angular.module('gameFinder.services', [])
     return GameService;
   })
 
- .factory('FilterService', function() {
+  .factory('FilterService', function() {
 
     var FilterService = {
       filterDuplicates: function(promise_obj) {
@@ -62,21 +62,9 @@ angular.module('gameFinder.services', [])
           unique_list = _.uniq(promise_obj, false, function(p){ return p.name; });
           return unique_list;
       },
-      mechFilter: function(filter, root_scope_games) {
-        var output =  _.filter(root_scope_games, function(game) {
-          var found = false;
-          _.each([filter.mechanics], function(filter_item){
-              if (_.contains(game.mechanics, filter_item)) { found = true; }
-          })
-          return found;
-        })
-        // console.log(output);
-        return output;
-      },
 
-      categoryFilter: function(filter, root_scope_games) {
-        // console.log(filter);
-        var output =  _.filter(root_scope_games, function(game) {
+      categoryFilter: function(filter, games_input) {
+        var output =  _.filter(games_input, function(game) {
           var found = false;
           _.each([filter.categories], function(filter_item){
               if (_.contains(game.categories, filter_item)) { found = true; }
@@ -84,7 +72,41 @@ angular.module('gameFinder.services', [])
           return found;
         })
         return output;
+      },
+
+      mechFilter: function(filter, games_input) {
+        var output =  _.filter(games_input, function(game) {
+          var found = false;
+          _.each([filter.mechanics], function(filter_item){
+              if (_.contains(game.mechanics, filter_item)) { found = true; }
+          })
+          return found;
+        })
+        return output;
+      },
+
+      playerFilter: function(numPlayers, games_input) {
+        // console.log(numPlayers)
+        var output =  _.filter(games_input, function(game) {
+          var found = false;
+        if ( game.minplayers < numPlayers < game.maxplayers ) { found = true; }
+          return found;
+        })
+        console.log(output)
+        return output;
       }
+
+      // playtimeFilter: function(filter, games_input) {
+      //   var output =  _.filter(games_input, function(game) {
+      //     var found = false;
+      //     _.each([filter.mechanics], function(filter_item){
+      //         if (_.contains(game.mechanics, filter_item)) { found = true; }
+      //     })
+      //     return found;
+      //   })
+      //   return output;
+      // }
+
     }
     return FilterService;
- });
+  });
