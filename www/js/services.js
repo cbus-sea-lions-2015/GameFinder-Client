@@ -62,11 +62,23 @@ angular.module('gameFinder.services', [])
           unique_list = _.uniq(promise_obj, false, function(p){ return p.name; });
           return unique_list;
       },
-      findbyFilter: function(filterObj, root_scope_games) {
+      mechFilter: function(filter, root_scope_games) {
         var output =  _.filter(root_scope_games, function(game) {
           var found = false;
-          _.each([filterObj.mechanic], function(filter_item){
+          _.each([filter.mechanics], function(filter_item){
               if (_.contains(game.mechanics, filter_item)) { found = true; }
+          })
+          return found;
+        })
+        return output;
+      },
+
+      categoryFilter: function(filter, root_scope_games) {
+        console.log(filter);
+        var output =  _.filter(root_scope_games, function(game) {
+          var found = false;
+          _.each([filter.categories], function(filter_item){
+              if (_.contains(game.categories, filter_item)) { found = true; }
           })
           return found;
         })

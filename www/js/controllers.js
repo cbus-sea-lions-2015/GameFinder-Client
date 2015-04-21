@@ -74,27 +74,36 @@ angular.module('gameFinder.controllers', [])
         $scope.search.gameList = newValue;
       });
 
-      // $scope.mechFilter = function() {
-      //   GameService.findbyMechanic([$scope.search.mechanic], scope.library_games)
-      //     .then(function(response) {
-      //       $rootScope.items = FilterService.filterDuplicates(response);
-      //       // $rootScope.items = response;
-      //       // console.log(scope.library_games)
-      //     })
-      // };
-
+      // FILTER BY MECHANIC
       $scope.mechFilter = function() {
         var validFilters = _.filter($scope.filter, function(filter_item){
-          console.log(filter_item);
           return !!filter_item;
         });
-        console.log(validFilters);
-        console.log($scope.filter);
+        // Filter field(s) is populated
         if (!_.isEmpty(validFilters)){
-          var filtered_games = FilterService.findbyFilter($scope.filter, scope.library_games)
+          var filtered_games = FilterService.mechFilter($scope.filter, scope.library_games)
           $rootScope.items = FilterService.filterDuplicates(filtered_games);
         };
       };
+
+      // FILTER BY CATEGORY
+      $scope.categoryFilter = function() {
+        var validFilters = _.filter($scope.filter, function(filter_item){
+          return !!filter_item;
+        });
+        // Filter field(s) is populated
+        if (!_.isEmpty(validFilters)){
+          var filtered_games = FilterService.categoryFilter($scope.filter, scope.library_games)
+          console.log("filtered games!");
+          console.log(filtered_games);
+          $rootScope.items = FilterService.filterDuplicates(filtered_games);
+        };
+      };
+
+      $scope.clearSearch = function() {
+        $rootScope.items = scope.library_games;
+      };
+
   })
 
   .controller('GameCtrl', function($scope, $http, $stateParams, GameService, FilterService) {
