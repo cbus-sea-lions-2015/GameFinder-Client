@@ -84,9 +84,16 @@ angular.module('gameFinder.controllers', [])
       // };
 
       $scope.mechFilter = function() {
-        console.log($scope.filter.mechanic);
-        var filtered_games = FilterService.findbyFilter($scope.filter, scope.library_games)
-        $rootScope.items = FilterService.filterDuplicates(filtered_games);
+        var validFilters = _.filter($scope.filter, function(filter_item){
+          console.log(filter_item);
+          return !!filter_item;
+        });
+        console.log(validFilters);
+        console.log($scope.filter);
+        if (!_.isEmpty(validFilters)){
+          var filtered_games = FilterService.findbyFilter($scope.filter, scope.library_games)
+          $rootScope.items = FilterService.filterDuplicates(filtered_games);
+        };
       };
   })
 
