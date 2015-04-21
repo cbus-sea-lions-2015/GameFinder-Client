@@ -1,9 +1,26 @@
 <ion-view view-title="Games">
-  <ion-content>
+  <ion-content has-header="true" has-subheader="true">
+    <div class="bar item-input-inset">
+      <button class="button button-icon button-clear ion-funnel" menu-toggle="left"></button>
+      <div class="item-input-wrapper">
+        <i class="icon ion-ios7-search placeholder-icon"></i>
+        <input id="search.searchKey" type="search" placeholder="Enter a Game's Name" ng-model="search.searchKey" autocorrect="off" >
+        <button class="button button-clear" ng-click="clearSearch()">X</button>
+      </div>
+      <button class="button button-clear" ng-click="searchFunc()">Search</button>
+    </div>
     <ion-list>
-      <ion-item ng-repeat="game in games" href="#/app/library/{{game.id}}">
-        {{ game.title }}
+      <ion-item ng-repeat="game in library_games" href="#/app/games/{{game.id}}" class="item item-thumbnail-left card">
+        <img src="{{ game.thumbnail_url }}">
+        <h3> {{ game.name }}</h3>
+        <h4>
+          {{ game.minplayers }} - {{ game.maxplayers }} <i class="icon ion-person-stalker"></i>,    {{ game.minplaytime }} - {{ game.maxplaytime }} <i class="icon ion-android-time"></i>
+        </h4>
+          <span class="button button-small button-balanced game-tag">Category</span>
+          <span class="button button-small button-positive game-tag">Mechanic</span>
+          <p>{{ game.description }}</p>
       </ion-item>
     </ion-list>
+
   </ion-content>
 </ion-view>
