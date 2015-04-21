@@ -88,23 +88,20 @@ angular.module('gameFinder.services', [])
       playerFilter: function(numPlayers, games_input) {
         var output =  _.filter(games_input, function(game) {
           var found = false;
-        if ( game.minplayers < numPlayers && numPlayers < game.maxplayers ) { found = true; }
+        if ( game.minplayers <= numPlayers && numPlayers <= game.maxplayers ) { found = true; }
+          return found;
+        })
+        return output;
+      },
+
+      playtimeFilter: function(playTime, games_input) {
+        var output =  _.filter(games_input, function(game) {
+          var found = false;
+        if ( game.minplaytime <= playTime && playTime <= game.maxplaytime ) { found = true; }
           return found;
         })
         return output;
       }
-
-      // playtimeFilter: function(filter, games_input) {
-      //   var output =  _.filter(games_input, function(game) {
-      //     var found = false;
-      //     _.each([filter.mechanics], function(filter_item){
-      //         if (_.contains(game.mechanics, filter_item)) { found = true; }
-      //     })
-      //     return found;
-      //   })
-      //   return output;
-      // }
-
     }
     return FilterService;
   });
