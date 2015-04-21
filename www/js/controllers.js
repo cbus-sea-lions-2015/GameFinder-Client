@@ -1,6 +1,36 @@
 angular.module('gameFinder.controllers', [])
 
-  .controller('LoginCtrl', function($scope, $http, auth, $state, store) {
+  .controller('LoginCtrl', function($scope, $http, auth, $state, store, $ionicModal) {
+
+    $scope.bgg_username = {};
+
+    $ionicModal.fromTemplateUrl('templates/welcome.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+
+    $scope.closeWelcome = function() {
+      $scope.modal.hide();
+    };
+
+    $scope.welcomeNewUser = function() {
+      console.log("welcome new user!")
+      // Function to display the modal when new user logs in
+      $scope.modal.show();
+    };
+
+
+    $scope.newLibrary = function() {
+      // Check to see if username is username first
+      // If username, send to libraries post route and close?
+      // If not username, prompt the user, display error
+      console.log($scope.bgg_username)
+    };
+
+
+
+
     function doAuth() {
       auth.signin({
         closable: false,
@@ -20,6 +50,7 @@ angular.module('gameFinder.controllers', [])
               //Add first-time user prompt, which should set bgg_username to.. something?
               console.log("no bgg_username")
               $state.go('app.search');
+              $scope.welcomeNewUser();
             } else {
               $state.go('app.search')
             }
