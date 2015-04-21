@@ -62,11 +62,10 @@ angular.module('gameFinder.services', [])
           unique_list = _.uniq(promise_obj, false, function(p){ return p.name; });
           return unique_list;
       },
-      findbyFilter: function(filter, root_scope_games) {
-        console.log(filter);
+      findbyFilter: function(filterObj, root_scope_games) {
         var output =  _.filter(root_scope_games, function(game) {
           var found = false;
-          _.each([filter.mechanic], function(filter_item){
+          _.each([filterObj.mechanic], function(filter_item){
               if (_.contains(game.mechanics, filter_item)) { found = true; }
           })
           return found;
