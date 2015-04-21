@@ -40,15 +40,14 @@ angular.module('gameFinder.services', [])
             return deferred.promise;
         },
 
-        findGame: function(name, root_scope_games) {
-            var deferred = $q.defer();
-            var output;
-            findAll('game').then(function (response) {
-                var games = response.data;
-                output = _.where(games, { bgg_username: name });
-                deferred.resolve(output);
-            })
-            return deferred.promise;
+        findGame: function(search_name, games_input) {
+          var output =  _.filter(games_input, function(game) {
+            var found = false;
+            if (game.name == search_name) { found = true; }
+            return found;
+          })
+          console.log(output);
+          return output;
         }
     }
     return GameService;
