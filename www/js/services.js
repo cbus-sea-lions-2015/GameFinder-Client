@@ -24,31 +24,21 @@ angular.module('gameFinder.services', [])
     };
 
     var GameService = {
+      
+      findItems: function(type,username, root_scope_games) {
+          return findAll(type,username, root_scope_games);
+      },
 
-        findItems: function(type,username, root_scope_games) {
-            return findAll(type,username, root_scope_games);
-        },
-
-        findLibrary: function(name) {
-            var deferred = $q.defer();
-            var output;
-            findAll('library').then(function (response) {
-                var libraries = response.data;
-                output = _.where(libraries, { bgg_username: name });
-                deferred.resolve(output);
-            });
-            return deferred.promise;
-        },
-
-        findGame: function(search_name, games_input) {
-          var output =  _.filter(games_input, function(game) {
-            var found = false;
-            if (game.name == search_name) { found = true; }
-            return found;
-          })
-          console.log(output);
-          return output;
-        }
+      findLibrary: function(name) {
+          var deferred = $q.defer();
+          var output;
+          findAll('library').then(function (response) {
+              var libraries = response.data;
+              output = _.where(libraries, { bgg_username: name });
+              deferred.resolve(output);
+          });
+          return deferred.promise;
+      }
     }
     return GameService;
   })
