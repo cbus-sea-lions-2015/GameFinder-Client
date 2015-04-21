@@ -1,6 +1,6 @@
 angular.module('gameFinder.controllers', [])
 
-  .controller('LoginCtrl', function($scope, auth, $state, store) {
+  .controller('LoginCtrl', function($scope, $http, auth, $state, store) {
     function doAuth() {
       auth.signin({
         closable: false,
@@ -13,7 +13,17 @@ angular.module('gameFinder.controllers', [])
         store.set('profile', profile);
         store.set('token', idToken);
         store.set('refreshToken', refreshToken);
-        $state.go('app.search');
+        $http.post("http://localhost:3000/users", {token: profile.user_id})
+          .success(function(data) {
+            console.log(data);
+            if(data["bgg_username"] === null){
+              //Add first-time user prompt, which should set bgg_username to.. something?
+              console.log("no bgg_username")
+              $state.go('app.search');
+            } else {
+              $state.go('app.search')
+            }
+          });
       }, function(error) {
         console.log("There was an error logging in", error);
       });
