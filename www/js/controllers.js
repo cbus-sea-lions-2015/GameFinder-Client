@@ -13,7 +13,7 @@ angular.module('gameFinder.controllers', [])
         store.set('profile', profile);
         store.set('token', idToken);
         store.set('refreshToken', refreshToken);
-        $http.post("http://localhost:3000/users", {token: profile.user_id})
+        $http.post("http://gamefinder.herokuapp.com/users", {token: profile.user_id})
           .success(function(data) {
             console.log(data);
             if(data["bgg_username"] === null){
