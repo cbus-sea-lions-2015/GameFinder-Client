@@ -74,15 +74,27 @@ angular.module('gameFinder.controllers', [])
         $scope.search.gameList = newValue;
       });
 
-      //FILTER BY PLAYERS
-       $scope.playerFilter = function() {
-         player_filter = { numPlayers: $scope.filter.numPlayers }
-        if (!!player_filter.numPlayers){
-          var filtered_games = FilterService.playerFilter(player_filter.numPlayers, scope.library_games)
+      //FILTER BY PLAYTIME
+       $scope.playtimeFilter = function() {
+         playtime_filter = { playTime: $scope.filter.playTime }
+        if (!!playtime_filter.playTime){
+          var filtered_games = FilterService.playtimeFilter(playtime_filter.playTime, scope.library_games)
           return FilterService.filterDuplicates(filtered_games);
         }
         else {
           return scope.library_games;
+        };
+      };
+
+      //FILTER BY PLAYERS
+       $scope.playerFilter = function(filtered_games_input) {
+         player_filter = { numPlayers: $scope.filter.numPlayers }
+        if (!!player_filter.numPlayers){
+          var filtered_games = FilterService.playerFilter(player_filter.numPlayers, filtered_games_input)
+          return FilterService.filterDuplicates(filtered_games);
+        }
+        else {
+          return filtered_games_input;
         };
       };
 
@@ -111,7 +123,8 @@ angular.module('gameFinder.controllers', [])
       };
 
       $scope.filterValidFilters = function() {
-        filtered_games_input = $scope.playerFilter();
+        filtered_games_input = $scope.playtimeFilter();
+        filtered_games_input = $scope.playerFilter(filtered_games_input);
         filtered_games_input = $scope.categoryFilter(filtered_games_input);
         filtered_games_input = $scope.mechFilter(filtered_games_input);
         $rootScope.items =  filtered_games_input;
