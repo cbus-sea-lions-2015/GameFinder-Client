@@ -74,37 +74,18 @@ angular.module('gameFinder.controllers', [])
         $scope.search.gameList = newValue;
       });
 
-      // // FILTER BY MECHANIC
-      // $scope.mechFilter = function() {
-      //   var validFilters = _.filter($scope.filter, function(filter_item){
-      //     return !!filter_item;
-      //   });
-      //   // Filter field(s) is populated
-      //   if (!_.isEmpty(validFilters)){
-      //     var filtered_games = FilterService.mechFilter($scope.filter, scope.library_games)
-      //     $rootScope.items = FilterService.filterDuplicates(filtered_games);
-      //   };
-      // };
-
-
 
       // FILTER BY CATEGORY
       $scope.categoryFilter = function() {
         category_filter = { categories: $scope.filter.categories }
-        // var validFilters = _.filter(category_filter, function(filter_item){
-        //   return !!filter_item;
-        // });
-        // console.log(validFilters)
         // Filter field(s) is populated
         if (!!category_filter.categories){
           var filtered_games = FilterService.categoryFilter(category_filter, scope.library_games)
-          // $rootScope.items = FilterService.filterDuplicates(filtered_games);
           return FilterService.filterDuplicates(filtered_games);
         }
         else {
           return scope.library_games;
         };
-
       };
 
       // FILTER BY MECHANIC
@@ -113,12 +94,13 @@ angular.module('gameFinder.controllers', [])
         var validFilters = _.filter(mechanic_filter, function(filter_item){
           return !!filter_item;
         });
-        console.log(validFilters);
         // Filter field(s) is populated
         if (!_.isEmpty(validFilters)){
-          console.log(filtered_games_input);
           var filtered_games = FilterService.mechFilter(mechanic_filter, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
+        }
+        else {
+          return filtered_games_input;
         };
       };
 
@@ -130,10 +112,14 @@ angular.module('gameFinder.controllers', [])
           filtered_games_input = $scope.categoryFilter();
           filtered_games_input = $scope.mechFilter(filtered_games_input);
         // });
+        console.log("This is the list you are looking at!")
+        console.log(filtered_games_input)
         $rootScope.items =  filtered_games_input;
       };
 
       $scope.clearSearch = function() {
+        $scope.filter.mechanics = "";
+        $scope.filter.categories = "";
         scope.items = scope.library_games;
       };
 
