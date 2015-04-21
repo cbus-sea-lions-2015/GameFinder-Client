@@ -101,7 +101,7 @@ angular.module('gameFinder.controllers', [])
       // FILTER BY MECHANIC
       $scope.mechFilter = function(filtered_games_input) {
         mechanic_filter = { mechanics: $scope.filter.mechanics }
-        if (!!mechanic_filter){
+        if (!!mechanic_filter.mechanics){
           var filtered_games = FilterService.mechFilter(mechanic_filter, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
         }
@@ -114,8 +114,6 @@ angular.module('gameFinder.controllers', [])
         filtered_games_input = $scope.playerFilter();
         filtered_games_input = $scope.categoryFilter(filtered_games_input);
         filtered_games_input = $scope.mechFilter(filtered_games_input);
-          console.log("This is the list you are looking at!")
-          console.log(filtered_games_input)
         $rootScope.items =  filtered_games_input;
       };
 

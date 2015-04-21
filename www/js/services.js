@@ -86,13 +86,11 @@ angular.module('gameFinder.services', [])
       },
 
       playerFilter: function(numPlayers, games_input) {
-        // console.log(numPlayers)
         var output =  _.filter(games_input, function(game) {
           var found = false;
-        if ( game.minplayers < numPlayers < game.maxplayers ) { found = true; }
+        if ( game.minplayers < numPlayers && numPlayers < game.maxplayers ) { found = true; }
           return found;
         })
-        console.log(output)
         return output;
       }
 
