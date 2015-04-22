@@ -24,7 +24,7 @@ angular.module('gameFinder.services', [])
     };
 
     var GameService = {
-      
+
       findItems: function(type,username, root_scope_games) {
           return findAll(type,username, root_scope_games);
       },
@@ -77,16 +77,20 @@ angular.module('gameFinder.services', [])
       playerFilter: function(numPlayers, games_input) {
         var output =  _.filter(games_input, function(game) {
           var found = false;
-        if ( game.minplayers <= numPlayers && numPlayers <= game.maxplayers ) { found = true; }
+          if ( game.minplayers <= numPlayers && numPlayers <= game.maxplayers ) {
+            found = true;
+          }
           return found;
-        })
-        return output;
+        });
+          return output;
       },
 
       playtimeFilter: function(playTime, games_input) {
         var output =  _.filter(games_input, function(game) {
           var found = false;
-        if ( game.minplaytime <= playTime && playTime <= game.maxplaytime ) { found = true; }
+          if ( playTime >= game.maxplaytime ) {
+            found = true;
+          }
           return found;
         })
         return output;
