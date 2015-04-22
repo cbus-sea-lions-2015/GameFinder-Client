@@ -1,12 +1,23 @@
-<ion-view view-title={{game.name}}>
+<ion-view view-title="">
   <ion-content>
-    <img src="{{game.thumbnail_url}}" alt="{{ game.name }}">
-    <h1><span>Name: </span>{{ game.name }}</h1>
-    <p><span>Description: </span>{{ game.description }}</p>
-    <p><span>Min Play Time: </span>{{ game.minplaytime }} minutes </p>
-    <p><span>Max Play Time: </span>{{ game.maxplaytime }} minutes </p>
-    <p><span>Min Players: </span>{{ game.minplayers }}</p>
-    <p><span>Max Players: </span>{{ game.maxplayers }}</p>
-    <p><span>BGG ID: </span>{{ game.bgg_id }}</p>
+
+    <div class="list card">
+
+      <div class="item">
+        <h1>{{ game.name }}</h1>
+        <h2>{{ game.minplayers }} - {{ game.maxplayers }} <i class="icon ion-person-stalker"></i>, {{ game.maxplaytime }} <i class="icon ion-android-time"></i></h2>
+      </div>
+
+      <div class="item item-body">
+        <img class="full-image" src="{{game.image_url}}" class="game-image">
+        <p>
+            {{ game.description }}
+        </p>
+        <p>
+          <p class="subdued">BGG ID - {{ game.bgg_id }}</p>
+        </p>
+      </div>
+
+    </div>
   </ion-content>
 </ion-view>

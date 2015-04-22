@@ -1,4 +1,4 @@
-<ion-view view-title="Libraries">
+<ion-view view-title="Find A Library">
   <ion-content has-header="true" has-subheader="true">
     <div class="bar item-input-inset">
       <div class="item-input-wrapper">
@@ -10,7 +10,7 @@
     </div>
     <ion-list ng-show='search.is_libraryList'>
       <ion-item ng-repeat="library in search.items" type="item-text-wrap" href="#/app/libraries/{{library.bgg_username}}" ng-click="popGames(library.bgg_username)">
-        <h4>{{ library.bgg_username }}</h4>
+        <h2>{{ library.bgg_username }}</h2>
       </ion-item>
     </ion-list>
   </ion-content>
