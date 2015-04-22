@@ -1,8 +1,8 @@
 angular.module('gameFinder.controllers', [])
 
-  .controller('LoginCtrl', function($scope, $http, auth, $state, store, $ionicModal) {
+  .controller('LoginCtrl', function($rootScope, $scope, $http, auth, $state, store, $ionicModal) {
 
-    $scope.bgg_username = {};
+    $scope.message = {};
 
     $ionicModal.fromTemplateUrl('templates/welcome.html', {
       scope: $scope
@@ -15,17 +15,39 @@ angular.module('gameFinder.controllers', [])
     };
 
     $scope.welcomeNewUser = function() {
-      console.log("welcome new user!")
       // Function to display the modal when new user logs in
       $scope.modal.show();
     };
 
 
-    $scope.newLibrary = function() {
+    $scope.newLibrary = function(user) {
       // Check to see if username is username first
       // If username, send to libraries post route and close?
       // If not username, prompt the user, display error
-      console.log($scope.bgg_username)
+      $http.post("http://gamefinder.herokuapp.com/libraries",
+      {
+        token: $scope.user.user_id,
+        bgg_username: user.bgg_username,
+        name: $scope.user.name
+      })
+      .success(function(data) {
+        if(data.message == 0) {
+          $scope.message = "That library does not exist."
+        } else {
+          $scope.message = "This library is currently being imported. This typically takes moments to complete, however larger libraries may take 15-30 minutes to populate."
+          $rootScope.user.bgg_username = user.bgg_username;
+          $http.post("http://gamefinder.herokuapp.com/users",
+          {
+            token: $scope.user.user_id,
+            bgg_username: user.bgg_username,
+            name: $scope.user.name
+          })
+          .success(function(data) {
+            $scope.closeWelcome();
+            $state.go('app.search')
+          });
+        }
+      });
     };
 
 
@@ -45,10 +67,9 @@ angular.module('gameFinder.controllers', [])
         store.set('refreshToken', refreshToken);
         $http.post("http://gamefinder.herokuapp.com/users", {token: profile.user_id})
           .success(function(data) {
-            console.log(data);
+            $rootScope.user = profile;
             if(data["bgg_username"] === null){
               //Add first-time user prompt, which should set bgg_username to.. something?
-              console.log("no bgg_username")
               $state.go('app.search');
               $scope.welcomeNewUser();
             } else {
@@ -66,6 +87,25 @@ angular.module('gameFinder.controllers', [])
 
     doAuth();
 
+  })
+
+
+.controller('ProfileCtrl', function($scope, $stateParams, $rootScope, $http, $state) {
+    $scope.user = $rootScope.user
+
+    $scope.updateBggUsername = function() {
+
+      $http.post("http://gamefinder.herokuapp.com/users",
+        {
+          token: $scope.user.auth0_id,
+          bgg_username: $scope.user.bgg_username,
+          name: $scope.user.name
+        })
+        .success(function(data) {
+          console.log(data);
+          $state.go('app.search')
+        });
+    }
   })
 
   .controller('LibCtrl', function($scope, $http, $stateParams) {
