@@ -43,7 +43,7 @@ angular.module('gameFinder', ['ionic',
     controller: 'LoginCtrl'
   })
 
- .state('app', {
+  .state('app', {
     url: "/app",
     abstract: true,
     templateUrl: "templates/menu.html",
@@ -52,6 +52,16 @@ angular.module('gameFinder', ['ionic',
       requiresLogin: true
     }
   })
+
+  // .state('app.profile', {
+  //   url: "/profile",
+  //   views: {
+  //     'menuContent': {
+  //       templateUrl: "templates/user.html",
+  //       controller: 'ProfileCtrl'
+  //     }
+  //   }
+  // })
 
   .state('app.search', {
     url: "/search",
@@ -71,7 +81,7 @@ angular.module('gameFinder', ['ionic',
         controller: 'GamesCtrl'
       }
     }
-  })  
+  })
 
   .state('app.single', {
     url: "/games/:gameId",

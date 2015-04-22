@@ -7,11 +7,14 @@
     </div>
   </ion-header-bar>
   <ion-content>
+    <h1 ng-model="message"></h1>
     <form ng-submit="newLibrary()">
       <div class="list">
         <label class="item item-input">
           <span class="input-label">BGG Username</span>
-          <input type="text" ng-model="bgg_username.bgg_username">
+          <ion-item>
+            <input type="text" ng-model="bgg_username"/>
+          </ion-item>
         </label>
 
         <label class="item">
