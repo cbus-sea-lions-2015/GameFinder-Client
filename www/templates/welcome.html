@@ -1,5 +1,5 @@
 <ion-modal-view>
-  <ion-header-bar class="bar-energized">
+  <ion-header-bar class="bar-stable">
     <h1 class="title"><strong>Welcome to gameFinder<strong></h1>
 
     <div class="buttons">
@@ -8,12 +8,12 @@
   </ion-header-bar>
   <ion-content>
     <h1 ng-model="message"></h1>
-    <form ng-submit="newLibrary()">
+    <form ng-submit="newLibrary(user)">
       <div class="list">
         <label class="item item-input">
           <span class="input-label">BGG Username</span>
           <ion-item>
-            <input type="text" ng-model="bgg_username"/>
+            <input type="text" ng-model="user.bgg_username"/>
           </ion-item>
         </label>
 
