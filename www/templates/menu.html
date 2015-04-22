@@ -68,10 +68,17 @@
           </input>
         </ion-item>
 
+        <ion-item nav-clear ng-show="search.is_gameList" class="item item-icon-left">
+          <input type="text" ng-model="search.another_bgg_username" placeholder="Another Library">
+           <i class="icon ion-gear-b"></i>
+          </input>
+        </ion-item>
+
         <button class="button icon-left ion-funnel button-positive" ng-click="filterValidFilters()" ng-show="search.is_gameList" menu-close>
           Filter
         </button>
         <button class="button icon-right button-negative" ng-click="clearSearch()">Clear</button>
+        <button class="button icon-right button-negative" ng-click="addAnotherLibrary(search)">Add Library</button>
       </ion-list>
     </ion-content>
   </ion-side-menu>

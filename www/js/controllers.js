@@ -116,7 +116,7 @@ angular.module('gameFinder.controllers', [])
       $rootScope.is_gameList = true;
 
       $rootScope.items = null;
-      $rootScope.library_games = null;
+      // $rootScope.library_games = null;
       $scope.logout = function() {
         auth.signout();
         store.remove('token');
@@ -133,6 +133,14 @@ angular.module('gameFinder.controllers', [])
       scope.$watch('is_gameList', function(newValue, oldValue){
         $scope.search.is_gameList = newValue;
       });
+
+
+      $scope.addAnotherLibrary = function(another) {
+        console.log("Add Another Library")
+        console.log($scope.search.another_bgg_username);
+        console.log(scope.library_games);
+        GameService.findItems('game',[$scope.search.another_bgg_username], scope.library_games)
+      };
 
       //FILTER BY PLAYTIME
        $scope.playtimeFilter = function() {
@@ -237,6 +245,7 @@ angular.module('gameFinder.controllers', [])
     $scope.search.is_gameList = true;
 
     var scope = $rootScope;
+    scope.library_games = [];
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
@@ -249,8 +258,13 @@ angular.module('gameFinder.controllers', [])
     };
 
     $scope.findAllGames = function() {
-      GameService.findItems('game',[$stateParams.username], $scope.library_games)
+      GameService.findItems('game',[$stateParams.username], scope.library_games)
     };
+
+    // $scope.addAnotherLibrary = function(another) {
+    //   console.log($scope.search.another_bgg_username);
+    //   GameService.findItems('game',[$scope.another.bgg_username], $scope.library_games)
+    // };
 
     scope.$watch('library_games', function(newValue, oldValue){
       $scope.library_games = $rootScope.library_games || $scope.library_games;
