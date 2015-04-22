@@ -155,6 +155,8 @@ angular.module('gameFinder.controllers', [])
 
       $scope.filterValidFilters = function() {
         console.log("Filter Running");
+        scope.library_games = scope.cached_games;
+
         filtered_games_input = $scope.playtimeFilter();
         filtered_games_input = $scope.playerFilter(filtered_games_input);
         filtered_games_input = $scope.categoryFilter(filtered_games_input);
@@ -193,16 +195,14 @@ angular.module('gameFinder.controllers', [])
 
     var scope = $rootScope;
 
-
-
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
       $scope.library_games = $scope.all_games;
     };
 
     $scope.searchFunc = function () {
-       var search_results = GameService.findGame($scope.search.searchKey, $scope.library_games);
-        $scope.library_games = search_results;
+      var search_results = GameService.findGame($scope.search.searchKey, $scope.library_games);
+      $scope.library_games = search_results;
     };
     $scope.findAllGames = function() {
       GameService.findItems('game',$stateParams.username).then(function (response) {
@@ -211,7 +211,7 @@ angular.module('gameFinder.controllers', [])
 
         $scope.all_games = games_list;
         $scope.library_games = $scope.all_games;
-        scope.library_games = $scope.all_games;
+        scope.cached_games = scope.library_games = $scope.all_games;
         scope.all_games = $scope.all_games;
       });
     };
