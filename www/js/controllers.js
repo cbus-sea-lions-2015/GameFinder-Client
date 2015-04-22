@@ -201,7 +201,6 @@ angular.module('gameFinder.controllers', [])
     };
 
     $scope.searchFunc = function () {
-      console.log(GameService)
       var search_results = GameService.findGame($scope.search.searchKey, $scope.library_games);
       $scope.library_games = search_results;
     };

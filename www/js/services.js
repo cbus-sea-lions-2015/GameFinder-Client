@@ -29,6 +29,18 @@ angular.module('gameFinder.services', [])
           return findAll(type,username, root_scope_games);
       },
 
+      findGame: function(search_str, games_input) {
+        var output =  _.filter(games_input, function(game) {
+          var found = false;
+            if (game.name.toLowerCase().indexOf(search_str.toLowerCase()) > -1)
+            {
+              found = true;
+            }
+          return found;
+        })
+        return output;
+      },
+
       findLibrary: function(name) {
           var deferred = $q.defer();
           var output;
