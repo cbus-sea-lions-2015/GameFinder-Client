@@ -2,6 +2,41 @@ angular.module('gameFinder.controllers', [])
 
   .controller('LoginCtrl', function($rootScope, $scope, $http, auth, $state, store, $ionicModal) {
 
+    function doAuth() {
+      auth.signin({
+        closable: false,
+        // This asks for the refresh token
+        // So that the user never has to log in again
+        authParams: {
+          scope: 'openid offline_access'
+        }
+      }, function(profile, idToken, accessToken, state, refreshToken) {
+        store.set('profile', profile);
+        store.set('token', idToken);
+        store.set('refreshToken', refreshToken);
+        $http.post("http://gamefinder.herokuapp.com/users", {token: profile.user_id, name: profile.name})
+          .success(function(data) {
+            $rootScope.user = profile;
+
+            if(data["library_id"] == null){
+              // Add first-time user prompt, which should set bgg_username to.. something?
+              $state.go('app.search');
+              $scope.welcomeNewUser();
+            } else {
+              $state.go('app.search')
+            }
+          });
+      }, function(error) {
+        console.log("There was an error logging in", error);
+      });
+    }
+
+    $scope.$on('$ionic.reconnectScope', function() {
+      doAuth();
+    });
+
+    doAuth();
+
     $scope.message = {};
 
     $ionicModal.fromTemplateUrl('templates/welcome.html', {
@@ -19,7 +54,6 @@ angular.module('gameFinder.controllers', [])
       $scope.modal.show();
     };
 
-
     $scope.newLibrary = function(user) {
       // Check to see if username is username first
       // If username, send to libraries post route and close?
@@ -36,56 +70,11 @@ angular.module('gameFinder.controllers', [])
         } else {
           $scope.message = "This library is currently being imported. This typically takes moments to complete, however larger libraries may take 15-30 minutes to populate."
           $rootScope.user.bgg_username = user.bgg_username;
-          $http.post("http://gamefinder.herokuapp.com/users",
-          {
-            token: $scope.user.user_id,
-            bgg_username: user.bgg_username,
-            name: $scope.user.name
-          })
-          .success(function(data) {
-            $scope.closeWelcome();
-            $state.go('app.search')
-          });
+          $scope.closeWelcome();
+          $state.go('app.search');
         }
       });
     };
-
-
-
-
-    function doAuth() {
-      auth.signin({
-        closable: false,
-        // This asks for the refresh token
-        // So that the user never has to log in again
-        authParams: {
-          scope: 'openid offline_access'
-        }
-      }, function(profile, idToken, accessToken, state, refreshToken) {
-        store.set('profile', profile);
-        store.set('token', idToken);
-        store.set('refreshToken', refreshToken);
-        $http.post("http://gamefinder.herokuapp.com/users", {token: profile.user_id})
-          .success(function(data) {
-            $rootScope.user = profile;
-            if(data["bgg_username"] === null){
-              //Add first-time user prompt, which should set bgg_username to.. something?
-              $state.go('app.search');
-              $scope.welcomeNewUser();
-            } else {
-              $state.go('app.search')
-            }
-          });
-      }, function(error) {
-        console.log("There was an error logging in", error);
-      });
-    }
-
-    $scope.$on('$ionic.reconnectScope', function() {
-      doAuth();
-    });
-
-    doAuth();
 
   })
 
