@@ -1,5 +1,17 @@
 /* Empty. Add your own CSS if you like */
 
+h1 {
+  font-size: 5.9vw;
+}
+
+h2 {
+  font-size: 3.0vh;
+}
+
+p {
+  font-size: 2vmin;
+}
+
 .button-small.game-tag {
   padding: 0px 3px 0px;
   min-width: 15px;
@@ -13,7 +25,17 @@
 }
 
 .item-thumbnail-left .item-content {
-  padding-left: 50px;
+  padding-left: 0px;
+}
+
+.game-image {
+  max-height: 200px;
+  max-width: 50%;
+}
+
+.center-text {
+  padding-top: 10px;
+  text-align: center;
 }
 
 /*.deleting {
