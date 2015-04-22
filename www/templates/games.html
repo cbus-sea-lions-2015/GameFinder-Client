@@ -10,7 +10,8 @@
       <button class="button button-clear" ng-click="searchFunc()">Search</button>
     </div>
     <ion-list>
-      <ion-item ng-repeat="game in library_games" href="#/app/games/{{game.id}}" class="item item-thumbnail-left card">
+      <ion-item ng-repeat="game in library_games" href="#/app/games/{{game.id}}" class="item item-thumbnail-left card card-{{$index}}" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)">
+
         <img src="{{ game.thumbnail_url }}">
         <h3> {{ game.name }}</h3>
         <h4>

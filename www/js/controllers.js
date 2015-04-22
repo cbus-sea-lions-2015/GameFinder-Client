@@ -213,6 +213,20 @@ angular.module('gameFinder.controllers', [])
         scope.library_games = scope.all_games;
       };
 
+      $scope.cardSwipedLeft = function(index) {
+        console.log('LEFT SWIPE');
+        $scope.cardDestroyed(index);
+      };
+
+      $scope.cardSwipedRight = function(index) {
+        console.log('RIGHT SWIPE');
+        $scope.cardDestroyed(index);
+      };
+
+      $scope.cardDestroyed = function(index) {
+        $scope.library_games.splice(index, 1);
+      };
+
   })
 
   .controller('GameCtrl', function($scope, $http, $stateParams, GameService, FilterService) {
