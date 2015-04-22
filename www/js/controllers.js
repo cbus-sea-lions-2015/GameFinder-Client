@@ -78,25 +78,6 @@ angular.module('gameFinder.controllers', [])
 
   })
 
-
-.controller('ProfileCtrl', function($scope, $stateParams, $rootScope, $http, $state) {
-    $scope.user = $rootScope.user
-
-    $scope.updateBggUsername = function() {
-
-      $http.post("http://gamefinder.herokuapp.com/users",
-        {
-          token: $scope.user.auth0_id,
-          bgg_username: $scope.user.bgg_username,
-          name: $scope.user.name
-        })
-        .success(function(data) {
-          console.log(data);
-          $state.go('app.search')
-        });
-    }
-  })
-
   .controller('LibCtrl', function($scope, $http, $stateParams) {
     var url = 'http://gamefinder.herokuapp.com/libraries';
 
@@ -235,8 +216,18 @@ angular.module('gameFinder.controllers', [])
     $scope.username = $stateParams.username;
     $scope.search.is_libraryList = false;
     $scope.search.is_gameList = true;
+    $scope.name = $rootScope.user.bgg_username;
 
     var scope = $rootScope;
+    // console.log("State params says I am: ", $stateParams.username);
+    // console.log("it should be assigned", $scope.name);
+
+    if($rootScope.user.bgg_username == $stateParams.username) {
+      $scope.isCurrentUser = true;
+      $scope.pageTitle = "My Library";
+    } else {
+      $scope.pageTitle = [$scope.username,"'s Library"].join("");
+    };
 
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";

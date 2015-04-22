@@ -11,7 +11,8 @@ angular.module('gameFinder', ['ionic',
   'gameFinder.services',
   'auth0',
   'angular-storage',
-  'angular-jwt'])
+  'angular-jwt',
+  'ngAnimate'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -52,16 +53,6 @@ angular.module('gameFinder', ['ionic',
       requiresLogin: true
     }
   })
-
-  // .state('app.profile', {
-  //   url: "/profile",
-  //   views: {
-  //     'menuContent': {
-  //       templateUrl: "templates/user.html",
-  //       controller: 'ProfileCtrl'
-  //     }
-  //   }
-  // })
 
   .state('app.search', {
     url: "/search",
