@@ -4,29 +4,42 @@ angular.module('gameFinder.services', [])
 
     var app_url = "http://gamefinder.herokuapp.com/libraries/";
 
-    var findAll = function(type,username, root_scope_games) {
-        var url;
-        if(type === 'library') {
-            url = app_url;
-        }
-        else {
-            url = [app_url,username].join("");
-        }
+    var filterDuplicates = function(resultdata) {
+      return _.uniq(resultdata, false, function(p) { return p.name; });
+    };
+
+    var findAll = function(type,username_arr, viewable_games) {
+      console.log("made it to GameService.findAll");
+      var url;
+      if(type === 'library') {
+        url = app_url;
         return $http.get(url).success(function(response){
-            if (typeof response === 'array') {
-                return response;
-            }
-            else {
-                root_scope_games = [response]
-                return [response];
-            };
+          if (typeof response === 'array') {
+              return response;
+          }
+          else {
+              viewable_games = [response]
+              return [response];
+          };
         });
+      } else {
+        var results = [];
+        _.each(username_arr, function (username) {
+          url = [app_url,username].join("");
+          $http.get(url).success(function(response){
+            _.each(filterDuplicates(response), function(result) {
+              viewable_games.push(result);
+            });
+          });
+        });
+        // return results;
+      };
     };
 
     var GameService = {
 
-      findItems: function(type,username, root_scope_games) {
-          return findAll(type,username, root_scope_games);
+      findItems: function(type,username_arr, viewable_games) {
+          return findAll(type,username_arr, viewable_games);
       },
 
       findGame: function(search_str, games_input) {

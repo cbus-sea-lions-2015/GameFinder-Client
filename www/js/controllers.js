@@ -230,7 +230,7 @@ angular.module('gameFinder.controllers', [])
   .controller('GamesCtrl', function($scope, $rootScope, $http, $stateParams, GameService, FilterService) {
     var url = ['http://gamefinder.herokuapp.com/libraries/',$stateParams.username].join("");
 
-    $scope.library_games = {};
+    $scope.library_games = [];
     $scope.search = {};
     $scope.username = $stateParams.username;
     $scope.search.is_libraryList = false;
@@ -247,16 +247,9 @@ angular.module('gameFinder.controllers', [])
       var search_results = GameService.findGame($scope.search.searchKey, $scope.library_games);
       $scope.library_games = search_results;
     };
-    $scope.findAllGames = function() {
-      GameService.findItems('game',$stateParams.username).then(function (response) {
-        games_list = FilterService.filterDuplicates(response.data);
-        console.log(games_list);
 
-        $scope.all_games = games_list;
-        $scope.library_games = $scope.all_games;
-        scope.cached_games = scope.library_games = $scope.all_games;
-        scope.all_games = $scope.all_games;
-      });
+    $scope.findAllGames = function() {
+      GameService.findItems('game',[$stateParams.username], $scope.library_games)
     };
 
     scope.$watch('library_games', function(newValue, oldValue){
