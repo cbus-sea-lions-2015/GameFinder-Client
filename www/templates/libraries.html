@@ -9,7 +9,7 @@
       <button class="button button-clear" ng-click="searchFunc()">Search</button>
     </div>
     <ion-list ng-show='search.is_libraryList'>
-      <ion-item ng-repeat="library in search.items" type="item-text-wrap" href="#/app/libraries/{{library.bgg_username}}">
+      <ion-item ng-repeat="library in get_viewable_libraries()" type="item-text-wrap" href="#/app/libraries/{{library.bgg_username}}">
         <h2>{{ library.bgg_username }}</h2>
       </ion-item>
     </ion-list>

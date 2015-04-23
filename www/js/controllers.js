@@ -89,7 +89,16 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('AppCtrl', function($rootScope, $scope, auth, store, $state, GameService, FilterService) {
+  .controller('AppCtrl', function(
+    $rootScope,
+    $scope,
+    auth,
+    store,
+    $state,
+    GameService,
+    FilterService,
+    ViewService)
+    {
       $scope.search = {};
       $scope.filter = {};
       $scope.search.is_libraryList = $rootScope.is_libraryList;
@@ -216,10 +225,12 @@ angular.module('gameFinder.controllers', [])
     });
   })
 
-  .controller('GamesCtrl', function($scope, $rootScope, $http, $stateParams, GameService, FilterService) {
+  .controller('GamesCtrl', function($scope, $rootScope, $http, $stateParams, GameService, FilterService, ViewService) {
     var url = ['http://gamefinder.herokuapp.com/libraries/',$stateParams.username].join("");
 
     $scope.library_games = [];
+    $scope.viewable_games = ViewService.viewable_games
+
     $scope.search = {};
     $scope.username = $stateParams.username;
     $scope.search.is_libraryList = false;
@@ -240,11 +251,13 @@ angular.module('gameFinder.controllers', [])
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
       $scope.library_games = $scope.all_games;
+
+      ViewService.resetViewableGames();
     };
 
     $scope.searchFunc = function () {
       var search_results = GameService.findGame($scope.search.searchKey, $scope.library_games);
-      $scope.library_games = search_results;
+      // $scope.library_games = search_results;
     };
 
     $scope.findAllGames = function() {
@@ -263,27 +276,37 @@ angular.module('gameFinder.controllers', [])
     $scope.findAllGames();
   })
 
-  .controller('SearchCtrl', function($rootScope, $scope, GameService, FilterService) {
+  .controller('SearchCtrl', function($rootScope, $scope, GameService, FilterService, ViewService) {
 
     $scope.search = {};
     $scope.search.searchKey = "";
     $scope.search.is_libraryList = true;
     $scope.search.is_gameList = false;
 
+    $scope.setAllLibraries = ViewService.setAllLibraries
+    $scope.setViewableLibraries = ViewService.setViewableLibraries
+    $scope.resetViewableLibraries = ViewService.resetViewableLibraries
+    $scope.get_all_libraries = ViewService.get_all_libraries
+    $scope.get_viewable_libraries = ViewService.get_viewable_libraries
+
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      $scope.findAllLibraries();
+
+      $scope.resetViewableLibraries();
     };
 
     $scope.searchFunc = function () {
-       GameService.findLibrary($scope.search.searchKey).then(function(item) {
-        $scope.search.items = item;
-      })
+      var search_results = GameService.findLibrary($scope.search.searchKey, $scope.get_all_libraries());
+
+      $scope.setViewableLibraries(search_results);
     };
 
     $scope.findAllLibraries = function() {
       GameService.findItems('library').then(function (response) {
         $scope.search.items = response.data;
+
+        $scope.setAllLibraries(response.data);
+        $scope.setViewableLibraries(response.data);
       })
     };
 

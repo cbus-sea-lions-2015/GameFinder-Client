@@ -46,23 +46,28 @@ angular.module('gameFinder.services', [])
         var output =  _.filter(games_input, function(game) {
           var found = false;
             if (game.name.toLowerCase().indexOf(search_str.toLowerCase()) > -1)
-            {
-              found = true;
-            }
+            { found = true; }
           return found;
         })
         return output;
       },
 
-      findLibrary: function(name) {
-          var deferred = $q.defer();
-          var output;
-          findAll('library').then(function (response) {
-              var libraries = response.data;
-              output = _.where(libraries, { bgg_username: name });
-              deferred.resolve(output);
-          });
-          return deferred.promise;
+      findLibrary: function(search_str, libraries_input) {
+        // var deferred = $q.defer();
+        // var output;
+        // findAll('library').then(function (response) {
+        //   var libraries = response.data;
+        //   output = _.where(libraries, { bgg_username: name });
+        //   deferred.resolve(output);
+        // });
+        // return deferred.promise;
+        var output =  _.filter(libraries_input, function(library) {
+          var found = false;
+            if (library.bgg_username.toLowerCase().indexOf(search_str.toLowerCase()) > -1)
+            { found = true; }
+          return found;
+        })
+        return output;
       }
     }
     return GameService;
@@ -122,4 +127,56 @@ angular.module('gameFinder.services', [])
       }
     }
     return FilterService;
-  });
+  })
+
+  .factory('ViewService', function(){
+    var all_games = [];
+    var viewable_games = [];
+
+    var all_libraries = [];
+    var viewable_libraries =[];
+    
+    var ViewService = {
+
+      get_all_games: function() {
+        return all_games
+      },
+
+      get_viewable_games: function() {
+        return viewable_games
+      },
+
+      setAllGames: function(games_arr) {
+        all_games = [].concat(games_arr || [])
+      },
+
+      setViewableGames: function(games_arr) {
+        viewable_games = [].concat(games_arr || [])
+      },
+
+      resetViewableGames: function() {
+        viewable_games = [].concat(all_games || [])
+      },
+
+      get_all_libraries: function() {
+        return all_libraries
+      },
+
+      get_viewable_libraries: function() {
+        return viewable_libraries
+      },
+
+      setAllLibraries: function(libraries_arr) {
+        all_libraries = [].concat(libraries_arr || [])
+      },
+
+      setViewableLibraries: function(libraries_arr) {
+        viewable_libraries = [].concat(libraries_arr || [])
+      },
+
+      resetViewableLibraries: function() {
+        viewable_libraries = [].concat(all_libraries || [])
+      }
+    };
+    return ViewService;
+  })
