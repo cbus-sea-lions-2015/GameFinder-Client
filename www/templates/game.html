@@ -9,7 +9,7 @@
       </div>
 
       <div class="item item-body">
-        <img class="full-image" src="{{game.image_url}}" class="game-image">
+        <img class="full-image" src="http:{{game.image_url}}" class="game-image">
         <span class="button button-balanced game-tag" ng-repeat="category in game.categories | unique">{{ category }}</span>
         <span class="button button-positive game-tag" ng-repeat="mechanic in game.mechanics | unique">{{ mechanic }}</span>
         <p>
