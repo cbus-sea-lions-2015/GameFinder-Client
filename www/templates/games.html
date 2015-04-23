@@ -15,10 +15,11 @@
         <img src="{{ game.thumbnail_url }}">
         <h3> {{ game.name }}</h3>
         <h4>
-          {{ game.minplayers }} - {{ game.maxplayers }} <i class="icon ion-person-stalker"></i>, {{ game.maxplaytime }} <i class="icon ion-android-time"></i>
+          {{ game.minplayers }} - {{ game.maxplayers }} <i class="icon ion-person-stalker"></i>
         </h4>
-          <span class="button button-small button-balanced game-tag">Category</span>
-          <span class="button button-small button-positive game-tag">Mechanic</span>
+        <h4>
+          {{ game.maxplaytime }} <i class="icon ion-android-time"></i>
+        </h4>
           <p>{{ game.description }}</p>
       </ion-item>
       <!-- </div> -->

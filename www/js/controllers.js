@@ -95,6 +95,7 @@ angular.module('gameFinder.controllers', [])
     auth,
     store,
     $state,
+    $http,
     GameService,
     FilterService,
     ViewService) {
@@ -122,6 +123,20 @@ angular.module('gameFinder.controllers', [])
         $state.go('login', {}, {reload: true});
       };
 
+      $scope.categories = [];
+
+      $http.get('http://gamefinder.herokuapp.com/categories/')
+        .success(function(data, status, headers, config) {
+          $scope.categories = data;
+      });
+
+      $scope.mechanics = [];
+
+      $http.get('http://gamefinder.herokuapp.com/mechanics/')
+        .success(function(data, status, headers, config) {
+          $scope.mechanics = data;
+      });
+
       var scope = $rootScope;
 
       scope.$watch('is_libraryList', function(newValue, oldValue){
@@ -139,8 +154,8 @@ angular.module('gameFinder.controllers', [])
 
       //FILTER BY PLAYTIME
        $scope.playtimeFilter = function(filtered_games_input) {
-        playtime_filter = { playTime: $scope.filter.playTime }
-        if (!!playtime_filter.playTime){
+        if (!!$scope.filter.playTime){
+          playtime_filter = { playTime: $scope.filter.playTime }
           var filtered_games = FilterService.playtimeFilter(playtime_filter.playTime, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
         }
@@ -151,8 +166,8 @@ angular.module('gameFinder.controllers', [])
 
       //FILTER BY PLAYERS
        $scope.playerFilter = function(filtered_games_input) {
-        player_filter = { numPlayers: $scope.filter.numPlayers }
-        if (!!player_filter.numPlayers){
+        if (!!$scope.filter.numPlayers){
+          player_filter = { numPlayers: $scope.filter.numPlayers }
           var filtered_games = FilterService.playerFilter(player_filter.numPlayers, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
         }
@@ -163,8 +178,8 @@ angular.module('gameFinder.controllers', [])
 
       // FILTER BY CATEGORY
       $scope.categoryFilter = function(filtered_games_input) {
-        category_filter = { categories: $scope.filter.categories }
-        if (!!category_filter.categories){
+        if (!!$scope.filter.categories){
+          category_filter = { categories: $scope.filter.categories.name }
           var filtered_games = FilterService.categoryFilter(category_filter, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
         }
@@ -175,8 +190,9 @@ angular.module('gameFinder.controllers', [])
 
       // FILTER BY MECHANIC
       $scope.mechFilter = function(filtered_games_input) {
-        mechanic_filter = { mechanics: $scope.filter.mechanics }
-        if (!!mechanic_filter.mechanics){
+        console.log($scope.filter.mechanics)
+        if (!!$scope.filter.mechanics){
+          mechanic_filter = { mechanics: $scope.filter.mechanics.name }
           var filtered_games = FilterService.mechFilter(mechanic_filter, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
         }
@@ -221,13 +237,8 @@ angular.module('gameFinder.controllers', [])
 
   })
 
-  .controller('GameCtrl', function($scope, $http, $stateParams, GameService, FilterService) {
-    var url = ['http://gamefinder.herokuapp.com/games/',$stateParams.gameId].join("");
-    $http.get(url).success(function(game) {
-      $scope.game = game;
-    }).error(function(data) {
-      console.log('server side error occurred.');
-    });
+  .controller('GameCtrl', function($scope, $http, $stateParams, GameService, FilterService, ViewService) {
+    $scope.game = _.findWhere(ViewService.get_all_games(), {id: parseInt($stateParams.gameId) });
   })
 
   .controller('GamesCtrl', function($scope, $rootScope, $http, $stateParams, GameService, FilterService, ViewService) {
@@ -246,14 +257,13 @@ angular.module('gameFinder.controllers', [])
     $scope.appendAllGames = ViewService.appendAllGames;
     $scope.sortAllGames = ViewService.sortAllGames;
 
-
     if($rootScope.user && $rootScope.user.bgg_username == $stateParams.username) {
       $scope.isCurrentUser = true;
       $scope.pageTitle = "My Library";
     } else {
       $scope.pageTitle = [$scope.username,"'s Library"].join("");
     };
-    
+
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
       $scope.resetViewableGames();
@@ -271,7 +281,7 @@ angular.module('gameFinder.controllers', [])
     // scope.$watch('library_games', function(newValue, oldValue){
     //   $scope.library_games = $rootScope.library_games || $scope.library_games;
     // });
-    
+
     $scope.setAllGames(null);
     $scope.resetViewableGames();
     $scope.findAllGames();
