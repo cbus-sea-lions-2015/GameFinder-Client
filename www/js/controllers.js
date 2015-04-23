@@ -95,6 +95,7 @@ angular.module('gameFinder.controllers', [])
     auth,
     store,
     $state,
+    $http,
     GameService,
     FilterService,
     ViewService) {
@@ -121,6 +122,20 @@ angular.module('gameFinder.controllers', [])
         store.remove('refreshToken');
         $state.go('login', {}, {reload: true});
       };
+
+      $scope.categories = [];
+
+      $http.get('http://gamefinder.herokuapp.com/categories/')
+        .success(function(data, status, headers, config) {
+          $scope.categories = data;
+      });
+
+      $scope.mechanics = [];
+
+      $http.get('http://gamefinder.herokuapp.com/mechanics/')
+        .success(function(data, status, headers, config) {
+          $scope.mechanics = data;
+      });
 
       var scope = $rootScope;
 
@@ -246,14 +261,13 @@ angular.module('gameFinder.controllers', [])
     $scope.appendAllGames = ViewService.appendAllGames;
     $scope.sortAllGames = ViewService.sortAllGames;
 
-
     if($rootScope.user && $rootScope.user.bgg_username == $stateParams.username) {
       $scope.isCurrentUser = true;
       $scope.pageTitle = "My Library";
     } else {
       $scope.pageTitle = [$scope.username,"'s Library"].join("");
     };
-    
+
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
       $scope.resetViewableGames();
@@ -271,7 +285,7 @@ angular.module('gameFinder.controllers', [])
     // scope.$watch('library_games', function(newValue, oldValue){
     //   $scope.library_games = $rootScope.library_games || $scope.library_games;
     // });
-    
+
     $scope.setAllGames(null);
     $scope.resetViewableGames();
     $scope.findAllGames();

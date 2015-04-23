@@ -12,7 +12,8 @@ angular.module('gameFinder', ['ionic',
   'auth0',
   'angular-storage',
   'angular-jwt',
-  'ngAnimate'])
+  'ngAnimate',
+  'ui.unique'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
