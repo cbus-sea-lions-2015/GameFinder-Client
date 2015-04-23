@@ -106,13 +106,14 @@ angular.module('gameFinder.controllers', [])
 
       $scope.setAllGames = ViewService.setAllGames;
       $scope.setViewableGames = ViewService.setViewableGames;
-      $scope.appendAllGames = ViewService.appendAllGames;
       $scope.resetViewableGames = ViewService.resetViewableGames;
       $scope.get_all_games = ViewService.get_all_games;
       $scope.get_viewable_games = ViewService.get_viewable_games;
+      $scope.appendAllGames = ViewService.appendAllGames;
+      $scope.sortAllGames = ViewService.sortAllGames;
 
       $rootScope.items = null;
-      // $rootScope.library_games = null;
+
       $scope.logout = function() {
         auth.signout();
         store.remove('token');
@@ -138,7 +139,6 @@ angular.module('gameFinder.controllers', [])
 
       //FILTER BY PLAYTIME
        $scope.playtimeFilter = function(filtered_games_input) {
-        console.log("DURING: ",filtered_games_input.length);
         playtime_filter = { playTime: $scope.filter.playTime }
         if (!!playtime_filter.playTime){
           var filtered_games = FilterService.playtimeFilter(playtime_filter.playTime, filtered_games_input)
@@ -186,21 +186,10 @@ angular.module('gameFinder.controllers', [])
       };
 
       $scope.filterValidFilters = function() {
-        console.log("Filter Running");
-
-        console.log("BEFORE: ",$scope.get_all_games().length);
-        console.log(
-          $scope.filter.playTime,
-          $scope.filter.numPlayers,
-          $scope.filter.categories,
-          $scope.filter.mechanics);
-
         filtered_games_input = $scope.playtimeFilter($scope.get_all_games());
         filtered_games_input = $scope.playerFilter(filtered_games_input);
         filtered_games_input = $scope.categoryFilter(filtered_games_input);
         filtered_games_input = $scope.mechFilter(filtered_games_input);
-
-        console.log("AFTER: ",filtered_games_input.length);
 
         $scope.setViewableGames(filtered_games_input);
       };
@@ -249,10 +238,11 @@ angular.module('gameFinder.controllers', [])
 
     $scope.setAllGames = ViewService.setAllGames;
     $scope.setViewableGames = ViewService.setViewableGames;
-    $scope.appendAllGames = ViewService.appendAllGames;
     $scope.resetViewableGames = ViewService.resetViewableGames;
     $scope.get_all_games = ViewService.get_all_games;
     $scope.get_viewable_games = ViewService.get_viewable_games;
+    $scope.appendAllGames = ViewService.appendAllGames;
+    $scope.sortAllGames = ViewService.sortAllGames;
 
 
     if($rootScope.user && $rootScope.user.bgg_username == $stateParams.username) {
@@ -279,7 +269,9 @@ angular.module('gameFinder.controllers', [])
     // scope.$watch('library_games', function(newValue, oldValue){
     //   $scope.library_games = $rootScope.library_games || $scope.library_games;
     // });
-
+    
+    $scope.setAllGames(null);
+    $scope.resetViewableGames();
     $scope.findAllGames();
   })
 

@@ -28,15 +28,11 @@ angular.module('gameFinder.services', [])
         _.each(username_arr, function (username) {
           url = [app_url,username].join("");
           $http.get(url).success(function(response){
-            // console.log(response);
             result = filterDuplicates(response)
-            // viewable_games.push(result);
-            // console.log(result);
 
             viewable_games.appendAllGames(result);
+            viewable_games.sortAllGames()
             viewable_games.resetViewableGames();
-            // console.log("All Games: ", viewable_games.get_all_games());
-            // console.log("Viewable Games: ", viewable_games.get_all_games());
           });
         });
         // return results;
@@ -152,7 +148,15 @@ angular.module('gameFinder.services', [])
       resetViewableGames: function() { viewable_games = [].concat(all_games || []) },
       resetViewableLibraries: function() { viewable_libraries = [].concat(all_libraries || []) },
 
-      appendAllGames: function(games_arr) { all_games = all_games.concat(games_arr || []) }
+      appendAllGames: function(games_arr) { all_games = all_games.concat(games_arr || []) },
+
+      sortAllGames: function() {
+        all_games = all_games.sort(function(a, b){
+          if(a.name < b.name) return -1;
+          if(a.name > b.name) return 1;
+          return 0;
+        });
+      }
     };
     return ViewService;
   })
