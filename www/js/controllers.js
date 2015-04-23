@@ -214,7 +214,9 @@ angular.module('gameFinder.controllers', [])
       };
 
       $scope.cardDestroyed = function(index) {
-        $scope.library_games.splice(index, 1);
+        var visible = $scope.get_viewable_games()
+        visible.splice(index, 1);
+        $scope.setViewableGames(visible);
       };
 
   })
