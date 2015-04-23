@@ -5,6 +5,7 @@ angular.module('gameFinder.services', [])
     var app_url = "http://gamefinder.herokuapp.com/libraries/";
 
     var filterDuplicates = function(resultdata) {
+      console.log(resultdata)
       return _.uniq(resultdata, false, function(p) { return p.name; });
     };
 
@@ -23,13 +24,19 @@ angular.module('gameFinder.services', [])
           };
         });
       } else {
-        var results = [];
+        // var results = [];
         _.each(username_arr, function (username) {
           url = [app_url,username].join("");
           $http.get(url).success(function(response){
-            _.each(filterDuplicates(response), function(result) {
-              viewable_games.push(result);
-            });
+            // console.log(response);
+            result = filterDuplicates(response)
+            // viewable_games.push(result);
+            // console.log(result);
+
+            viewable_games.appendAllGames(result);
+            viewable_games.resetViewableGames();
+            // console.log("All Games: ", viewable_games.get_all_games());
+            // console.log("Viewable Games: ", viewable_games.get_all_games());
           });
         });
         // return results;
@@ -53,14 +60,6 @@ angular.module('gameFinder.services', [])
       },
 
       findLibrary: function(search_str, libraries_input) {
-        // var deferred = $q.defer();
-        // var output;
-        // findAll('library').then(function (response) {
-        //   var libraries = response.data;
-        //   output = _.where(libraries, { bgg_username: name });
-        //   deferred.resolve(output);
-        // });
-        // return deferred.promise;
         var output =  _.filter(libraries_input, function(library) {
           var found = false;
             if (library.bgg_username.toLowerCase().indexOf(search_str.toLowerCase()) > -1)
@@ -148,6 +147,11 @@ angular.module('gameFinder.services', [])
 
       setAllGames: function(games_arr) {
         all_games = [].concat(games_arr || [])
+      },
+
+      appendAllGames: function(games_arr) {
+        console.log(games_arr);
+        all_games = all_games.concat(games_arr || [])
       },
 
       setViewableGames: function(games_arr) {

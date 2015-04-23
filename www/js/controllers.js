@@ -228,50 +228,43 @@ angular.module('gameFinder.controllers', [])
   .controller('GamesCtrl', function($scope, $rootScope, $http, $stateParams, GameService, FilterService, ViewService) {
     var url = ['http://gamefinder.herokuapp.com/libraries/',$stateParams.username].join("");
 
-    $scope.library_games = [];
-    $scope.viewable_games = ViewService.viewable_games
-
     $scope.search = {};
     $scope.username = $stateParams.username;
     $scope.search.is_libraryList = false;
     $scope.search.is_gameList = true;
-    $scope.name = $rootScope.user.bgg_username;
 
-    var scope = $rootScope;
+    $scope.setAllGames = ViewService.setAllGames;
+    $scope.setViewableGames = ViewService.setViewableGames;
+    $scope.appendAllGames = ViewService.appendAllGames;
+    $scope.resetViewableGames = ViewService.resetViewableGames;
+    $scope.get_all_games = ViewService.get_all_games;
+    $scope.get_viewable_games = ViewService.get_viewable_games;
 
-    if($rootScope.user.bgg_username == $stateParams.username) {
+
+    if($rootScope.user && $rootScope.user.bgg_username == $stateParams.username) {
       $scope.isCurrentUser = true;
       $scope.pageTitle = "My Library";
     } else {
       $scope.pageTitle = [$scope.username,"'s Library"].join("");
     };
     
-    scope.library_games = [];
-
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      $scope.library_games = $scope.all_games;
-
       ViewService.resetViewableGames();
     };
 
     $scope.searchFunc = function () {
-      var search_results = GameService.findGame($scope.search.searchKey, $scope.library_games);
-      // $scope.library_games = search_results;
+      var search_results = GameService.findGame($scope.search.searchKey, $scope.get_all_games());
+      $scope.setViewableGames(search_results);
     };
 
     $scope.findAllGames = function() {
-      GameService.findItems('game',[$stateParams.username], scope.library_games)
+      GameService.findItems('game',[$stateParams.username], $scope);
     };
 
-    // $scope.addAnotherLibrary = function(another) {
-    //   console.log($scope.search.another_bgg_username);
-    //   GameService.findItems('game',[$scope.another.bgg_username], $scope.library_games)
-    // };
-
-    scope.$watch('library_games', function(newValue, oldValue){
-      $scope.library_games = $rootScope.library_games || $scope.library_games;
-    });
+    // scope.$watch('library_games', function(newValue, oldValue){
+    //   $scope.library_games = $rootScope.library_games || $scope.library_games;
+    // });
 
     $scope.findAllGames();
   })

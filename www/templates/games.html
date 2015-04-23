@@ -11,7 +11,7 @@
     </div>
     <ion-list>
       <!-- <div class="slide-animate-container"> -->
-      <ion-item ng-repeat="game in library_games" href="#/app/games/{{game.id}}" class="item item-thumbnail-left card card-{{$index}}" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)">
+      <ion-item ng-repeat="game in get_viewable_games()" href="#/app/games/{{game.id}}" class="item item-thumbnail-left card card-{{$index}}" on-swipe-left="cardSwipedLeft($index)" on-swipe-right="cardSwipedRight($index)" on-partial-swipe="cardPartialSwipe(amt)">
         <img src="{{ game.thumbnail_url }}">
         <h3> {{ game.name }}</h3>
         <h4>
