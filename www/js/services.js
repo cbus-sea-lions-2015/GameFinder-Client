@@ -5,7 +5,7 @@ angular.module('gameFinder.services', [])
     var app_url = "http://gamefinder.herokuapp.com/libraries/";
 
     var filterDuplicates = function(resultdata) {
-      console.log(resultdata)
+      // console.log(resultdata)
       return _.uniq(resultdata, false, function(p) { return p.name; });
     };
 
@@ -137,50 +137,22 @@ angular.module('gameFinder.services', [])
     
     var ViewService = {
 
-      get_all_games: function() {
-        return all_games
-      },
+      get_all_games: function() { return all_games },
+      get_all_libraries: function() { return all_libraries },
 
-      get_viewable_games: function() {
-        return viewable_games
-      },
+      get_viewable_games: function() { return viewable_games },
+      get_viewable_libraries: function() { return viewable_libraries },
 
-      setAllGames: function(games_arr) {
-        all_games = [].concat(games_arr || [])
-      },
+      setAllGames: function(games_arr) { all_games = [].concat(games_arr || []) },
+      setAllLibraries: function(libraries_arr) { all_libraries = [].concat(libraries_arr || []) },
 
-      appendAllGames: function(games_arr) {
-        console.log(games_arr);
-        all_games = all_games.concat(games_arr || [])
-      },
+      setViewableGames: function(games_arr) { viewable_games = [].concat(games_arr || []) },
+      setViewableLibraries: function(libraries_arr) { viewable_libraries = [].concat(libraries_arr || []) },
 
-      setViewableGames: function(games_arr) {
-        viewable_games = [].concat(games_arr || [])
-      },
+      resetViewableGames: function() { viewable_games = [].concat(all_games || []) },
+      resetViewableLibraries: function() { viewable_libraries = [].concat(all_libraries || []) },
 
-      resetViewableGames: function() {
-        viewable_games = [].concat(all_games || [])
-      },
-
-      get_all_libraries: function() {
-        return all_libraries
-      },
-
-      get_viewable_libraries: function() {
-        return viewable_libraries
-      },
-
-      setAllLibraries: function(libraries_arr) {
-        all_libraries = [].concat(libraries_arr || [])
-      },
-
-      setViewableLibraries: function(libraries_arr) {
-        viewable_libraries = [].concat(libraries_arr || [])
-      },
-
-      resetViewableLibraries: function() {
-        viewable_libraries = [].concat(all_libraries || [])
-      }
+      appendAllGames: function(games_arr) { all_games = all_games.concat(games_arr || []) }
     };
     return ViewService;
   })

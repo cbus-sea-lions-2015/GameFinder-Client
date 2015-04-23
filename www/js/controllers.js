@@ -97,13 +97,19 @@ angular.module('gameFinder.controllers', [])
     $state,
     GameService,
     FilterService,
-    ViewService)
-    {
+    ViewService) {
       $scope.search = {};
       $scope.filter = {};
       $scope.search.is_libraryList = $rootScope.is_libraryList;
       $scope.search.is_gameList = $rootScope.is_gameList;
       $rootScope.is_gameList = true;
+
+      $scope.setAllGames = ViewService.setAllGames;
+      $scope.setViewableGames = ViewService.setViewableGames;
+      $scope.appendAllGames = ViewService.appendAllGames;
+      $scope.resetViewableGames = ViewService.resetViewableGames;
+      $scope.get_all_games = ViewService.get_all_games;
+      $scope.get_viewable_games = ViewService.get_viewable_games;
 
       $rootScope.items = null;
       // $rootScope.library_games = null;
@@ -127,26 +133,25 @@ angular.module('gameFinder.controllers', [])
 
       $scope.addAnotherLibrary = function(another) {
         console.log("Add Another Library")
-        console.log($scope.search.another_bgg_username);
-        console.log(scope.library_games);
-        GameService.findItems('game',[$scope.search.another_bgg_username], scope.library_games)
+        GameService.findItems('game',[$scope.search.another_bgg_username], $scope)
       };
 
       //FILTER BY PLAYTIME
-       $scope.playtimeFilter = function() {
-         playtime_filter = { playTime: $scope.filter.playTime }
+       $scope.playtimeFilter = function(filtered_games_input) {
+        console.log("DURING: ",filtered_games_input.length);
+        playtime_filter = { playTime: $scope.filter.playTime }
         if (!!playtime_filter.playTime){
-          var filtered_games = FilterService.playtimeFilter(playtime_filter.playTime, scope.library_games)
+          var filtered_games = FilterService.playtimeFilter(playtime_filter.playTime, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
         }
         else {
-          return scope.library_games;
+          return filtered_games_input;
         };
       };
 
       //FILTER BY PLAYERS
        $scope.playerFilter = function(filtered_games_input) {
-         player_filter = { numPlayers: $scope.filter.numPlayers }
+        player_filter = { numPlayers: $scope.filter.numPlayers }
         if (!!player_filter.numPlayers){
           var filtered_games = FilterService.playerFilter(player_filter.numPlayers, filtered_games_input)
           return FilterService.filterDuplicates(filtered_games);
@@ -182,22 +187,31 @@ angular.module('gameFinder.controllers', [])
 
       $scope.filterValidFilters = function() {
         console.log("Filter Running");
-        scope.library_games = scope.cached_games;
 
-        filtered_games_input = $scope.playtimeFilter();
+        console.log("BEFORE: ",$scope.get_all_games().length);
+        console.log(
+          $scope.filter.playTime,
+          $scope.filter.numPlayers,
+          $scope.filter.categories,
+          $scope.filter.mechanics);
+
+        filtered_games_input = $scope.playtimeFilter($scope.get_all_games());
         filtered_games_input = $scope.playerFilter(filtered_games_input);
         filtered_games_input = $scope.categoryFilter(filtered_games_input);
         filtered_games_input = $scope.mechFilter(filtered_games_input);
-        console.log(filtered_games_input);
-        $rootScope.library_games =  filtered_games_input;
+
+        console.log("AFTER: ",filtered_games_input.length);
+
+        $scope.setViewableGames(filtered_games_input);
       };
 
       $scope.clearSearch = function() {
-        $scope.filter.numPlayers = "";
-        $scope.filter.playTime = "";
-        $scope.filter.mechanics = "";
-        $scope.filter.categories = "";
-        scope.library_games = scope.all_games;
+        $scope.filter.numPlayers = undefined;
+        $scope.filter.playTime = undefined;
+        $scope.filter.mechanics = undefined;
+        $scope.filter.categories = undefined;
+
+        $scope.resetViewableGames();
       };
 
       $scope.cardSwipedLeft = function(index) {
@@ -250,7 +264,7 @@ angular.module('gameFinder.controllers', [])
     
     $scope.clearSearch = function () {
       $scope.search.searchKey = "";
-      ViewService.resetViewableGames();
+      $scope.resetViewableGames();
     };
 
     $scope.searchFunc = function () {
